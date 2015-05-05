@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
 import defs.Definitions;
 
 /**
@@ -35,7 +36,7 @@ public class Player implements Serializable
      */
     public boolean save()
     {
-        try (ObjectOutputStream filestream = new ObjectOutputStream(new FileOutputStream(Definitions.getPlayerFile(mPlayerName))))
+        try (ObjectOutputStream filestream = new ObjectOutputStream(new FileOutputStream(getPlayerFile())))
         {
             filestream.writeObject(this);
             return true;
@@ -77,16 +78,54 @@ public class Player implements Serializable
     }
     
     /**
+     * Deletes file representing player profile. If deletion fails, nothing happens.
+     */
+    public void delete()
+    {
+        getPlayerFile().delete();
+    }
+
+    /**
+     * Converts argument into File class representing serialized player profile.
+     * @param player_name Player name to generate file from.
+     * @return File representing abstract path to serialized player profile.
+     */
+    public static final File getPlayerFile(String playerName)
+    {
+        return new File(Definitions.SAVES_DIRECTORY + "/" + playerName + Definitions.SAVES_EXTENSION);
+    }
+
+    /**
+     * Converts this player into File class representing serialized profile.
+     * @return File representing abstract path to serialized player profile.
+     */
+    public File getPlayerFile()
+    {
+        return getPlayerFile(mPlayerName);
+    }
+    
+    
+    /**
      * Attempts to save a player to the file. If file already exists, this method will fail.
      * @return True if save was successful, false if not or file already exists.
      */
     public boolean trySave()
     {
-        if (Definitions.getPlayerFile(mPlayerName).exists())
+        if (getPlayerFile().exists())
             return false;
         return save();
     }
     
     /** Name of the player. */
     private String mPlayerName;
+    
+    /**
+     * Converts player to string from its name.
+     * @return Player name.
+     */
+    @Override
+    public String toString()
+    {
+        return mPlayerName;
+    }
 }

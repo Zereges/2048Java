@@ -13,15 +13,4 @@ public abstract class Definitions
     
     /** File extension, used to distinguish player profiles */ 
     public static final String SAVES_EXTENSION = ".sav";
-    
-    /**
-     * Converts argument into File class representing serialized player profile.
-     * @param player_name Player name to generate file from.
-     * @return File representing abstracct path to serialized player profile.
-     * @see Player
-     */
-    public static final File getPlayerFile(String player_name)
-    {
-        return new File(SAVES_DIRECTORY + "/" + player_name + ".sav");
-    }
 }

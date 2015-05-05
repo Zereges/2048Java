@@ -22,13 +22,14 @@ public class PlayerPickerWindow
 {
     private JFrame mFrame = new JFrame("2048 Game");
     private JLabel mInfoLabel = new JLabel("Select a profile to load. Profiles are saved in " + Definitions.SAVES_DIRECTORY + " folder.");
-    private JComboBox<String> mPlayerProfiles = new JComboBox<>();
+    private JComboBox<Player> mPlayerProfiles = new JComboBox<>();
     private FancyTextField mNewProfileName = new FancyTextField("Type in desired name", false);
-    private JButton mNewProfileButton = new JButton("Create new profile");
+    private JButton mNewProfile = new JButton("Create new profile");
+    private JButton mDeleteProfile = new JButton("Delete profile");
     private JButton mStartGame = new JButton("Load profile & Start game");
     public PlayerPickerWindow() throws UnrecoverableException
     {
-        mNewProfileButton.addActionListener((ActionEvent e) -> {
+        mNewProfile.addActionListener((ActionEvent e) -> {
             if (!mNewProfileName.isValid())
                 return;
             String name = mNewProfileName.getText();
@@ -44,13 +45,31 @@ public class PlayerPickerWindow
                     mPlayerProfiles.setEnabled(true);
                     mPlayerProfiles.removeAllItems();
                     mStartGame.setEnabled(true);
+                    mDeleteProfile.setEnabled(true);
                 }
-                mPlayerProfiles.addItem(name);
+                mPlayerProfiles.addItem(p);
                 mPlayerProfiles.setSelectedItem(name);
             }
         });
         
-        Player[] playerProfiles = listPlayerProfiles();
+        mDeleteProfile.addActionListener((ActionEvent e) -> {
+            // ToDo simple warining confirmation window.
+            if (mPlayerProfiles.isEnabled())
+            {
+                Player p = mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex());
+                p.delete();
+                mPlayerProfiles.removeItem(p);
+                if (mPlayerProfiles.getItemCount() == 0)
+                    noProfiles();
+            }
+        });
+        
+        mStartGame.addActionListener((ActionEvent e) -> {
+            mFrame.dispose();
+        });
+        
+        listPlayerProfiles();
+        
         SwingUtilities.invokeLater(() -> {
             GridBagLayout layout = new GridBagLayout();
             GridBagConstraints constraints = new GridBagConstraints();
@@ -64,17 +83,21 @@ public class PlayerPickerWindow
             constraints.gridx = 0; constraints.gridy = 0;
             mFrame.getContentPane().add(mInfoLabel, constraints);
             
+            constraints.gridwidth = GridBagConstraints.RELATIVE;
+            constraints.weightx = 1.0;
             constraints.gridx = 0; constraints.gridy = 1;
             mFrame.getContentPane().add(mPlayerProfiles, constraints);
             
-            constraints.weightx = 1.0;
-            constraints.gridwidth = GridBagConstraints.RELATIVE;
+            constraints.weightx = 0.0;
+            constraints.gridx = 1; constraints.gridy = 1;
+            mFrame.getContentPane().add(mDeleteProfile, constraints);
+            
             constraints.gridx = 0; constraints.gridy = 2;
             mFrame.getContentPane().add(mNewProfileName, constraints);
 
             constraints.weightx = 0.0;
             constraints.gridx = 1; constraints.gridy = 2;
-            mFrame.getContentPane().add(mNewProfileButton, constraints);
+            mFrame.getContentPane().add(mNewProfile, constraints);
             
             constraints.gridwidth = GridBagConstraints.REMAINDER;
             constraints.weightx = 1;
@@ -86,7 +109,7 @@ public class PlayerPickerWindow
         });
     }
     
-    private Player[] listPlayerProfiles() throws UnrecoverableException
+    private void listPlayerProfiles() throws UnrecoverableException
     {
         File statsDir = new File(Definitions.SAVES_DIRECTORY);
         if (!statsDir.isDirectory())
@@ -94,23 +117,25 @@ public class PlayerPickerWindow
                 throw new UnrecoverableException(UnrecovableType.CANNOT_CREATE_STATS_DIR);
         File[] files = statsDir.listFiles((File dir, String name) -> { return name.endsWith(Definitions.SAVES_EXTENSION); });
         
-        Player[] playerProfiles = new Player[files.length];
         if (files.length == 0)
+            noProfiles();
+        else
         {
-            String message = "No profiles found";
+            for (int i = 0; i < files.length; ++i)
+                mPlayerProfiles.addItem(Player.load(files[i]));
+        }
+    }
+    
+    private void noProfiles()
+    {
+        if (mPlayerProfiles.getItemCount() == 0)
+        {
+            Player message = new Player("No profiles found");
             mPlayerProfiles.addItem(message);
             mPlayerProfiles.setSelectedItem(message);
             mPlayerProfiles.setEnabled(false);
             mStartGame.setEnabled(false);
-        }
-        else
-        {
-            for (int i = 0; i < files.length; ++i)
-            {
-                playerProfiles[i] = Player.load(files[i]);
-                mPlayerProfiles.addItem(playerProfiles[i].getName());
-            }
-        }
-        return playerProfiles;
+            mDeleteProfile.setEnabled(false);                
+        }        
     }
 }
