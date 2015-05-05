@@ -4,11 +4,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
 import windows.components.FancyTextField;
 import main.Player;
 import defs.Definitions;
@@ -53,15 +56,15 @@ public class PlayerPickerWindow
         });
         
         mDeleteProfile.addActionListener((ActionEvent e) -> {
-            // ToDo simple warining confirmation window.
-            if (mPlayerProfiles.isEnabled())
-            {
-                Player p = mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex());
-                p.delete();
-                mPlayerProfiles.removeItem(p);
-                if (mPlayerProfiles.getItemCount() == 0)
-                    noProfiles();
-            }
+            if (JOptionPane.showConfirmDialog(null, "This will delete whole profile contents from the disk.", "Are you sure?",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION)
+                return;
+            
+            Player p = mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex());
+            p.delete();
+            mPlayerProfiles.removeItem(p);
+            if (mPlayerProfiles.getItemCount() == 0)
+                noProfiles();
         });
         
         mStartGame.addActionListener((ActionEvent e) -> {
