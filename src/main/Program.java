@@ -1,3 +1,5 @@
+package main;
+import defs.UnrecoverableException;
 import windows.PlayerPickerWindow;
 
 /**
@@ -11,6 +13,13 @@ public class Program
      */
     public static void main(String[] args)
     {
-        PlayerPickerWindow playerPickerWindow = new PlayerPickerWindow();
+        try
+        {
+            new PlayerPickerWindow();
+        }
+        catch (UnrecoverableException e)
+        {
+            
+        }
     }
 }
