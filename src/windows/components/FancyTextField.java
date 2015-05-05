@@ -1,8 +1,8 @@
 package windows.components;
+
 import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
 import javax.swing.JTextField;
 
 /**

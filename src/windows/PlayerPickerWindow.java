@@ -4,30 +4,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
-
-
-
-
-import java.io.FileFilter;
-import java.io.FilenameFilter;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-
-
-
-
-
-
-
-
-
-
 import windows.components.FancyTextField;
 import main.Player;
 import defs.Definitions;
