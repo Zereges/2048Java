@@ -7,9 +7,26 @@ public class UnrecoverableException extends Exception
     /**
      * @param type {@link defs.UnrecovableType Type} of the exception. 
      */
-    public UnrecoverableException(UnrecovableType type)
+    public UnrecoverableException(UnrecoverableType type)
     {
-        m_type = type;
+        mType = type;
     }
-    UnrecovableType m_type;
+    
+    /** 
+     * Shows error message for given type.
+     * @return Verbose string of error type.
+     */
+    @Override
+    public String toString()
+    {
+        switch (mType)
+        {
+            case CANNOT_CREATE_STATS_DIR:
+                return "Stats dir could not be created, probably because there exists Stats file";
+                        
+            default:
+                return "Undefined error message";
+        }
+    }
+    private UnrecoverableType mType;
 }

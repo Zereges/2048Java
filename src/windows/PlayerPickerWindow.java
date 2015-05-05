@@ -16,7 +16,7 @@ import windows.components.FancyTextField;
 import main.Player;
 import defs.Definitions;
 import defs.UnrecoverableException;
-import defs.UnrecovableType;
+import defs.UnrecoverableType;
 
 /**
  * @brief Represents window used for picking player profile.
@@ -56,8 +56,7 @@ public class PlayerPickerWindow
         });
         
         mDeleteProfile.addActionListener((ActionEvent e) -> {
-            if (JOptionPane.showConfirmDialog(null, "This will delete whole profile contents from the disk.", "Are you sure?",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) != JOptionPane.YES_OPTION)
+            if (!confirmDelete())
                 return;
             
             Player p = mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex());
@@ -69,6 +68,7 @@ public class PlayerPickerWindow
         
         mStartGame.addActionListener((ActionEvent e) -> {
             mFrame.dispose();
+            new GameWindow(mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex()));
         });
         
         listPlayerProfiles();
@@ -117,7 +117,7 @@ public class PlayerPickerWindow
         File statsDir = new File(Definitions.SAVES_DIRECTORY);
         if (!statsDir.isDirectory())
             if (!statsDir.mkdir())
-                throw new UnrecoverableException(UnrecovableType.CANNOT_CREATE_STATS_DIR);
+                throw new UnrecoverableException(UnrecoverableType.CANNOT_CREATE_STATS_DIR);
         File[] files = statsDir.listFiles((File dir, String name) -> { return name.endsWith(Definitions.SAVES_EXTENSION); });
         
         if (files.length == 0)
@@ -138,7 +138,14 @@ public class PlayerPickerWindow
             mPlayerProfiles.setSelectedItem(message);
             mPlayerProfiles.setEnabled(false);
             mStartGame.setEnabled(false);
-            mDeleteProfile.setEnabled(false);                
+            mDeleteProfile.setEnabled(false);
         }        
+    }
+    
+    private boolean confirmDelete()
+    {
+        return JOptionPane.showConfirmDialog(null, "This will delete whole profile contents from the disk.", "Are you sure?",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION;
+        
     }
 }

@@ -19,7 +19,7 @@ public class Program
         }
         catch (UnrecoverableException e)
         {
-            
+            System.err.println(e.toString());
         }
     }
 }
