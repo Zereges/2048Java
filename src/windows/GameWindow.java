@@ -11,14 +11,14 @@ import javax.swing.JMenuBar;
 import javax.swing.SwingUtilities;
 
 import defs.Definitions;
+import defs.Player;
 import windows.components.ScoreLabel;
-import main.GameBoard;
-import main.Player;
+import main.Game;
 
 public class GameWindow
 {
     private JFrame mFrame;
-    private GameBoard mGame = new GameBoard();
+    private Game mGame;
     private Player mPlayer;
     private ScoreLabel mScore = new ScoreLabel();
     private JMenuBar mMenuBar = new JMenuBar();
@@ -32,35 +32,40 @@ public class GameWindow
     public GameWindow(Player player)
     {
         mPlayer = player;
+        mGame = new Game(mPlayer, this);
         mFrame = new JFrame("2048 Game (Playing as " + mPlayer + ")");
         mGame.setPreferredSize(Definitions.getMinDimension());
+        mGame.setSize(Definitions.getMinDimension());
         mFrame.setResizable(false);
         mGame.setBackground(Color.BLUE);
         mMenuBar.add(mStats);
         mMenuBar.add(mRestart);
         
         mRestart.addActionListener((ActionEvent e) -> { mGame.restart(); });
+
+        GridBagLayout layout = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        mFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        mFrame.setLayout(layout);
         
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridwidth = GridBagConstraints.REMAINDER;
+        constraints.weightx = 0;
+        constraints.gridx = 0; constraints.gridy = 0;
+        mFrame.getContentPane().add(mScore, constraints);
+        
+        constraints.weightx = 1;
+        constraints.gridx = 0; constraints.gridy = 1;
+        mFrame.getContentPane().add(mGame, constraints);
+        
+        mFrame.setJMenuBar(mMenuBar);
+        mFrame.pack();
+    }
+    
+    void show()
+    {
         SwingUtilities.invokeLater(() -> {
-            GridBagLayout layout = new GridBagLayout();
-            GridBagConstraints constraints = new GridBagConstraints();
-            mFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            mFrame.setLayout(layout);
-            
-            constraints.fill = GridBagConstraints.BOTH;
-            constraints.gridwidth = GridBagConstraints.REMAINDER;
-            constraints.weightx = 0;
-            constraints.gridx = 0; constraints.gridy = 0;
-            mFrame.getContentPane().add(mScore, constraints);
-            
-            constraints.weightx = 1;
-            constraints.gridx = 0; constraints.gridy = 1;
-            mFrame.getContentPane().add(mGame, constraints);
-            
-            mFrame.setJMenuBar(mMenuBar);
-            mFrame.pack();
             mFrame.setVisible(true);
         });
     }
-    
 }

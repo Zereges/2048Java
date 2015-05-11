@@ -15,7 +15,8 @@ public class Program
     {
         try
         {
-            new PlayerPickerWindow();
+            PlayerPickerWindow playerWindow = new PlayerPickerWindow();
+            playerWindow.show();
         }
         catch (UnrecoverableException e)
         {

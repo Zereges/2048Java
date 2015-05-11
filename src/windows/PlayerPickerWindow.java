@@ -13,8 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import windows.components.FancyTextField;
-import main.Player;
 import defs.Definitions;
+import defs.Player;
 import defs.UnrecoverableException;
 import defs.UnrecoverableType;
 
@@ -32,6 +32,7 @@ public class PlayerPickerWindow
     private JButton mStartGame = new JButton("Load profile & Start game");
     public PlayerPickerWindow() throws UnrecoverableException
     {
+        // New profile name
         mNewProfile.addActionListener((ActionEvent e) -> {
             if (!mNewProfileName.isValid())
                 return;
@@ -55,6 +56,7 @@ public class PlayerPickerWindow
             }
         });
         
+        // Delete profile button
         mDeleteProfile.addActionListener((ActionEvent e) -> {
             if (!confirmDelete())
                 return;
@@ -66,49 +68,54 @@ public class PlayerPickerWindow
                 noProfiles();
         });
         
+        // Start game button
         mStartGame.addActionListener((ActionEvent e) -> {
             mFrame.dispose();
-            new GameWindow(mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex()));
+            GameWindow window = new GameWindow(mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex()));
+            window.show();
         });
         
         listPlayerProfiles();
+        GridBagLayout layout = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        mFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        mFrame.setLayout(layout);
+        mFrame.setResizable(false);
         
-        SwingUtilities.invokeLater(() -> {
-            GridBagLayout layout = new GridBagLayout();
-            GridBagConstraints constraints = new GridBagConstraints();
-            mFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            mFrame.setLayout(layout);
-            mFrame.setResizable(false);
-            
-            constraints.fill = GridBagConstraints.BOTH;
-            constraints.gridwidth = GridBagConstraints.REMAINDER;
-            constraints.weightx = 1;
-            constraints.gridx = 0; constraints.gridy = 0;
-            mFrame.getContentPane().add(mInfoLabel, constraints);
-            
-            constraints.gridwidth = GridBagConstraints.RELATIVE;
-            constraints.weightx = 1.0;
-            constraints.gridx = 0; constraints.gridy = 1;
-            mFrame.getContentPane().add(mPlayerProfiles, constraints);
-            
-            constraints.weightx = 0.0;
-            constraints.gridx = 1; constraints.gridy = 1;
-            mFrame.getContentPane().add(mDeleteProfile, constraints);
-            
-            constraints.gridx = 0; constraints.gridy = 2;
-            mFrame.getContentPane().add(mNewProfileName, constraints);
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridwidth = GridBagConstraints.REMAINDER;
+        constraints.weightx = 1;
+        constraints.gridx = 0; constraints.gridy = 0;
+        mFrame.getContentPane().add(mInfoLabel, constraints);
+        
+        constraints.gridwidth = GridBagConstraints.RELATIVE;
+        constraints.weightx = 1.0;
+        constraints.gridx = 0; constraints.gridy = 1;
+        mFrame.getContentPane().add(mPlayerProfiles, constraints);
+        
+        constraints.weightx = 0.0;
+        constraints.gridx = 1; constraints.gridy = 1;
+        mFrame.getContentPane().add(mDeleteProfile, constraints);
+        
+        constraints.gridx = 0; constraints.gridy = 2;
+        mFrame.getContentPane().add(mNewProfileName, constraints);
 
-            constraints.weightx = 0.0;
-            constraints.gridx = 1; constraints.gridy = 2;
-            mFrame.getContentPane().add(mNewProfile, constraints);
-            
-            constraints.gridwidth = GridBagConstraints.REMAINDER;
-            constraints.weightx = 1;
-            constraints.gridx = 0; constraints.gridy = 3;
-            mFrame.getContentPane().add(mStartGame, constraints);
-            
-            mFrame.pack();
-            mFrame.setVisible(true);
+        constraints.weightx = 0.0;
+        constraints.gridx = 1; constraints.gridy = 2;
+        mFrame.getContentPane().add(mNewProfile, constraints);
+        
+        constraints.gridwidth = GridBagConstraints.REMAINDER;
+        constraints.weightx = 1;
+        constraints.gridx = 0; constraints.gridy = 3;
+        mFrame.getContentPane().add(mStartGame, constraints);
+
+        mFrame.pack();
+    }
+    
+    public void show()
+    {
+        SwingUtilities.invokeLater(() -> {
+           mFrame.setVisible(true); 
         });
     }
     
