@@ -40,7 +40,7 @@ public abstract class Definitions
     }
     public static final int FRAMES_PER_SECOND = 60;
 
-    public static final int DEFAULT_MOVE_SPEED = 20;
+    public static final int DEFAULT_MOVE_SPEED = 30;
     public static final int DEFAULT_SPAWN_SPEED = 10;
         
     /**
