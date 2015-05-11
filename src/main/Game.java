@@ -13,6 +13,7 @@ import java.util.Random;
 import javax.swing.JPanel;
 
 import anims.Movement;
+import anims.Spawn;
 import windows.GameWindow;
 import defs.Blocks;
 import defs.Definitions;
@@ -134,9 +135,9 @@ public class Game extends JPanel
     {
         if (mRects[x][y] != null)
             return false;
-        mRects[x][y] = new NumberedRect(Rect.getBlockCoords(x, y), block);
-        // ToDo: Animation
-        repaint();
+        mRects[x][y] = new NumberedRect(Rect.getBlockCoords(x, y), block, 0, 0, 0);
+        mAnimator.add(new Spawn(mRects[x][y], Rect.getBlockCoords(x, y)));
+        mAnimator.startAnimation();
         return true;
     }
     private boolean spawnBlock(Blocks block, int x, int y) { return spawnBlock(block.getValue(), x, y); }

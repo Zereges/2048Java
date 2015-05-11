@@ -7,7 +7,7 @@ import defs.NumberedRect;
 
 public class Movement extends Animation
 {
-    public Movement(NumberedRect source, Point target, double speed)
+    public Movement(NumberedRect source, Point target, int speed)
     {
         super(source, target, speed);
     }

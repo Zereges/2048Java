@@ -37,6 +37,14 @@ public class Rect
                 );
     }
     public int getX() { return mPoint.x; }
+    public void setX(int x) { mPoint.x = x; } 
     public int getY() { return mPoint.y; }
+    public void setY(int y) { mPoint.y = y; } 
+    
+    public int getWidth() { return mWidth; }
+    public void setWidth(int width) { mWidth = width; } 
+    public int getHeight() { return mHeight; }
+    public void setHeight(int height) { mHeight = height; }
+    
     public Point getPoint() { return mPoint; }
 }

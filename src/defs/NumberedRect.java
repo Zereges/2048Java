@@ -8,11 +8,19 @@ import java.awt.geom.Rectangle2D;
 public class NumberedRect extends Rect
 {
     protected int mNumber;
+    protected int mFontSize = Definitions.getDefaultBlockFontSize("" + mNumber);
     
     public NumberedRect(Point point, int number)
     {
         super(point, Definitions.getBlockColor(number));
         mNumber = number;
+    }
+
+    public NumberedRect(Point point, int number, int width, int height, int fontSize)
+    {
+        super(point, Definitions.getBlockColor(number), width, height);
+        mNumber = number;
+        int mFontSize = fontSize;
     }
     
     public int getNumber()
@@ -26,7 +34,7 @@ public class NumberedRect extends Rect
         super.draw(graphics);
         graphics.setColor(Definitions.DEFAULT_BLOCK_FONT_COLOR);
         String text = "" + getNumber();
-        graphics.setFont(graphics.getFont().deriveFont(0, Definitions.getDefaultBlockFontSize(text)));
+        graphics.setFont(graphics.getFont().deriveFont(0, mFontSize));
 
         // centering the text
         FontMetrics fontMetrics = graphics.getFontMetrics();
@@ -35,4 +43,8 @@ public class NumberedRect extends Rect
         int y = mPoint.y + (mHeight - (int) rect.getHeight()) / 2 + fontMetrics.getAscent();
         graphics.drawString(text, x, y);
     }
-}
+    
+    public int getFontSize() { return Definitions.getDefaultBlockFontSize("" + mNumber); }
+    public int getCurrentFontSize() { return mFontSize; }
+    public void setCurrentFontSize(int fontSize) { mFontSize = fontSize; }
+}    

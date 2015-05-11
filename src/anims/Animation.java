@@ -7,10 +7,10 @@ import defs.NumberedRect;
 public abstract class Animation
 {
     protected NumberedRect mSource;
-    protected double mSpeed;
+    protected int mSpeed;
     protected Point mTarget;
     
-    public Animation(NumberedRect source, Point target, double speed)
+    public Animation(NumberedRect source, Point target, int speed)
     {
         mSource = source;
         mTarget = target;
