@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import defs.Definitions;
@@ -73,5 +74,10 @@ public class GameWindow
     public void setScore(String score)
     {
         mScore.setText("Score: " + score);
+    }
+    
+    public void showWarning(String title, String message)
+    {
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.PLAIN_MESSAGE);        
     }
 }

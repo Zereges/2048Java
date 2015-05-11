@@ -154,6 +154,5 @@ public class PlayerPickerWindow
     {
         return JOptionPane.showConfirmDialog(null, "This will delete whole profile contents from the disk.", "Are you sure?",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION;
-        
     }
 }

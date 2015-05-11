@@ -9,7 +9,11 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import anims.Merge;
@@ -36,7 +40,7 @@ public class Game extends JPanel
     private Random mRandom = new Random();
     private int mScore = 0;
     private boolean mWon = false;
-
+    private long mStartTime;
 
     private class MyDispatcher implements KeyEventDispatcher
     {
@@ -68,6 +72,9 @@ public class Game extends JPanel
                     Definitions.MIN_BLOCK_SIZE)
                 );
             }
+    
+        for (int i = 0; i < Definitions.DEFAULT_START_BLOCKS; ++i)
+            randomBlock();    
     }
     
     public void keyPressed(int keyCode)
@@ -99,10 +106,10 @@ public class Game extends JPanel
     
     public void play(Direction direction)
     {
-        if (!can_play())
+        if (!canPlay())
             return;
         
-        boolean played;
+        boolean played = false;
         switch (direction)
         {
             case LEFT:
@@ -196,12 +203,32 @@ public class Game extends JPanel
         }
 
         mAnimator.startAnimation();
+        onTurnEnd(played);
     }
     
+    private void onTurnEnd(boolean played)
+    {
+        if (played)
+        {
+            randomBlock();
+        }
+        
+        if (isGameOver())
+            gameOver();
+    }
+
+    private void gameOver()
+    {
+        if (mWon)
+            return;
+        mCanplay = false;
+        mWindow.showWarning("Game Over!", "Press Restart to play again.");
+    }
+
     private void mergeTo(int fromX, int fromY, int toX, int toY)
     {
-        // Animation will handle incrementing number and deleting merged block after animation processes
-        mAnimator.add(new Merge(mRects[fromX][fromY], mRects[toX][toY], this, fromX, fromY));
+        mRects[fromX][fromY] = null;
+        mRects[toX][toY].nextNumber();
     }
 
     public boolean canMerge(NumberedRect r1, NumberedRect r2)
@@ -209,7 +236,7 @@ public class Game extends JPanel
         return r1 != null && r2 != null && r1.getNumber() == r2.getNumber();
     }
 
-    private boolean can_play()
+    private boolean canPlay()
     {
         return mAnimator.canPlay() && mCanplay;
     }
@@ -226,8 +253,8 @@ public class Game extends JPanel
         if (mRects[x][y] != null)
             return false;
         mRects[x][y] = new NumberedRect(Rect.getBlockCoords(x, y), block, 0, 0, 0);
-        mAnimator.add(new Spawn(mRects[x][y], Rect.getBlockCoords(x, y)));
-        mAnimator.startAnimation();
+        
+        mAnimator.addAndStart(new Spawn(mRects[x][y], Rect.getBlockCoords(x, y)));
         return true;
     }
     private boolean spawnBlock(Blocks block, int x, int y) { return spawnBlock(block.getValue(), x, y); }
@@ -257,7 +284,16 @@ public class Game extends JPanel
     
     public void restart()
     {
-
+        mAnimator.clear();
+        mRects = new NumberedRect[Definitions.BLOCK_COUNT_X][Definitions.BLOCK_COUNT_Y];
+        
+        for (int i = 0; i < Definitions.DEFAULT_START_BLOCKS; ++i)
+            randomBlock();
+        mCanplay = true;
+        mWon = false;
+        mStartTime = System.currentTimeMillis() / 1000;
+        mScore = 0;
+        mWindow.setScore(mScore + "");        
     }
     
     @Override
@@ -285,5 +321,31 @@ public class Game extends JPanel
         mScore += number;
         mWindow.setScore(mScore + (mWon ? " (W)" : ""));
     }
+    
+    public boolean isGameOver()
+    {
+        for (int x = 0; x < Definitions.BLOCK_COUNT_X; ++x)
+            for (int y = 0; y < Definitions.BLOCK_COUNT_Y; ++y)
+                if (mRects[x][y] == null)
+                    return false;
 
+        // Board is full, looking for merge.
+        for (int x = 0; x < Definitions.BLOCK_COUNT_X - 1; ++x)
+            for (int y = 0; y < Definitions.BLOCK_COUNT_Y - 1; ++y)
+            {
+                if (canMerge(mRects[x][y], mRects[x][y + 1]))
+                    return false;
+                if (canMerge(mRects[x][y], mRects[x + 1][y]))
+                    return false;
+            }
+        for (int x = 0; x < Definitions.BLOCK_COUNT_X - 1; ++x)
+            if (canMerge(mRects[x][Definitions.BLOCK_COUNT_Y - 1], mRects[x + 1][Definitions.BLOCK_COUNT_Y - 1]))
+                return false;
+        for (int y = 0; y < Definitions.BLOCK_COUNT_Y - 1; ++y)
+            if (canMerge(mRects[Definitions.BLOCK_COUNT_X - 1][y], mRects[Definitions.BLOCK_COUNT_X - 1][y + 1]))
+                return false;
+        
+        return true;
+        
+    }
 }

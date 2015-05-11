@@ -80,6 +80,8 @@ public abstract class Definitions
         // others are same as the previous one
     };
 
+    public static final int DEFAULT_START_BLOCKS = 2;
+
     public static Color getBlockColor(int block)
     {
         return block < BLOCK_COLORS.length ? BLOCK_COLORS[block] : BLOCK_COLORS[BLOCK_COLORS.length - 1]; 
