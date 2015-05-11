@@ -47,4 +47,6 @@ public class NumberedRect extends Rect
     public int getFontSize() { return Definitions.getDefaultBlockFontSize("" + mNumber); }
     public int getCurrentFontSize() { return mFontSize; }
     public void setCurrentFontSize(int fontSize) { mFontSize = fontSize; }
+
+    public void nextNumber() { mColor = Definitions.getBlockColor(++mNumber); }
 }    

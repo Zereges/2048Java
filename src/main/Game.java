@@ -12,6 +12,7 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
+import anims.Merge;
 import anims.Movement;
 import anims.Spawn;
 import windows.GameWindow;
@@ -100,25 +101,112 @@ public class Game extends JPanel
             return;
         
         boolean played;
-        // case left
-        for (int y = 0; y < Definitions.BLOCK_COUNT_Y; ++y)
+        switch (direction)
         {
-            for (int x = 1; x < Definitions.BLOCK_COUNT_X; ++x)
-            {
-                if (mRects[x][y] == null)
-                    continue;
-                int i = x;
-                while (i > 0 && mRects[--i][y] == null); // find closest block
-                if (mRects[i][y] == null || mRects[++i][y] == null)
+            case LEFT:
+                for (int y = 0; y < Definitions.BLOCK_COUNT_Y; ++y)
                 {
-                    moveTo(x, y, i, y);
-                    played = true;
+                    for (int x = 1; x < Definitions.BLOCK_COUNT_X; ++x)
+                    {
+                        if (mRects[x][y] == null)
+                            continue;
+                        int i = x;
+                        while (i > 0 && mRects[--i][y] == null); // find closest block
+                        if (canMerge(mRects[x][y], mRects[i][y]))
+                        {
+                            mergeTo(x, y, i, y);
+                            played = true;
+                        }
+                        else if (mRects[i][y] == null || mRects[++i][y] == null)
+                        {
+                            moveTo(x, y, i, y);
+                            played = true;
+                        }
+                    }
                 }
-            }
+                break;
+            case RIGHT:
+                for (int y = 0; y < Definitions.BLOCK_COUNT_Y; ++y)
+                {
+                    for (int x = Definitions.BLOCK_COUNT_X - 2; x >= 0; --x)
+                    {
+                        if (mRects[x][y] == null)
+                            continue;
+                        int i = x;
+                        while (i < Definitions.BLOCK_COUNT_X - 1 && mRects[++i][y] == null);
+                        if (canMerge(mRects[x][y], mRects[i][y]))
+                        {
+                            mergeTo(x, y, i, y);
+                            played = true;
+                        }
+                        else if (mRects[i][y] == null || mRects[--i][y] == null)
+                        {
+                            moveTo(x, y, i, y);
+                            played = true;
+                        }
+                    }
+                }
+                break;
+            case UP:
+                for (int x = 0; x < Definitions.BLOCK_COUNT_X; ++x)
+                {
+                    for (int y = 1; y < Definitions.BLOCK_COUNT_Y; ++y)
+                    {
+                        if (mRects[x][y] == null)
+                            continue;
+                        int i = y;
+                        while (i > 0 && mRects[x][--i] == null); // find closest block
+                        if (canMerge(mRects[x][y], mRects[x][i]))
+                        {
+                            mergeTo(x, y, x, i);
+                            played = true;
+                        }
+                        else if (mRects[x][i] == null || mRects[x][++i] == null)
+                        {
+                            moveTo(x, y, x, i);
+                            played = true;
+                        }
+                    }
+                }
+                break;
+            case DOWN:
+                for (int x = 0; x < Definitions.BLOCK_COUNT_X; ++x)
+                {
+                    for (int y = Definitions.BLOCK_COUNT_Y - 2; y >= 0; --y)
+                    {
+                        if (mRects[x][y] == null)
+                            continue;
+                        int i = y;
+                        while (i < Definitions.BLOCK_COUNT_Y - 1 && mRects[x][++i] == null);
+                        if (canMerge(mRects[x][y], mRects[x][i]))
+                        {
+                            mergeTo(x, y, x, i);
+                            played = true;
+                        }
+                        else if (mRects[x][i] == null || mRects[x][--i] == null)
+                        {
+                            moveTo(x, y, x, i);
+                            played = true;
+                        }
+                    }
+                }
+                break;
         }
+
         mAnimator.startAnimation();
     }
     
+    private void mergeTo(int fromX, int fromY, int toX, int toY)
+    {
+        // Animation will handle incrementing number after animation processes.
+        mAnimator.add(new Merge(mRects[fromX][fromY], mRects[toX][toY], this, fromX, fromY));     
+    }
+
+    public boolean canMerge(NumberedRect r1, NumberedRect r2)
+    {
+        return r1 != null && r2 != null && r1.getNumber() == r2.getNumber();
+    }
+
     private boolean can_play()
     {
         return mAnimator.canPlay() && mCanplay;
@@ -160,6 +248,10 @@ public class Game extends JPanel
         return randomBlock(mRandom.nextInt(100) < Definitions.BLOCK_4_SPAWN_CHANCE ? Blocks.BLOCK_4 : Blocks.BLOCK_2);
     }
     
+    public void removeBlock(int x, int y)
+    {
+        mRects[x][y] = null;
+    }
     
     public void restart()
     {
@@ -185,4 +277,5 @@ public class Game extends JPanel
                 if (rect != null)
                     rect.draw(graphics);
     }
+
 }
