@@ -32,11 +32,12 @@ public class GameWindow
     public GameWindow(Player player)
     {
         mPlayer = player;
-        mGame = new Game(mPlayer, this);
         mFrame = new JFrame("2048 Game (Playing as " + mPlayer + ")");
+        mFrame.setResizable(false);
+        mFrame.setLocationByPlatform(true);
+        mGame = new Game(mPlayer, this);
         mGame.setPreferredSize(Definitions.getMinDimension());
         mGame.setSize(Definitions.getMinDimension());
-        mFrame.setResizable(false);
         mGame.setBackground(Color.BLUE);
         mMenuBar.add(mStats);
         mMenuBar.add(mRestart);

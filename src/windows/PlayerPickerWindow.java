@@ -81,6 +81,7 @@ public class PlayerPickerWindow
         mFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mFrame.setLayout(layout);
         mFrame.setResizable(false);
+        mFrame.setLocationByPlatform(true);
         
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridwidth = GridBagConstraints.REMAINDER;
