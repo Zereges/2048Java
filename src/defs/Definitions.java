@@ -2,6 +2,8 @@ package defs;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 
 /**
  * @brief Definitions class to store constants and simple constants manipulating functions. 
@@ -28,6 +30,9 @@ public abstract class Definitions
     public static final int MIN_BLOCK_SPACE = 15;
     
     public static final int BLOCK_4_SPAWN_CHANCE = 15;
+    
+    public static final Font DEFAULT_BLOCK_FONT = new Font("Arial", 0, MIN_BLOCK_SIZE / 3);
+    public static final Color DEFAULT_BLOCK_FONT_COLOR = Color.WHITE; 
     
     /**
      * Calculates minimal width of the game board.

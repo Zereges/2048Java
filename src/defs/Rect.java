@@ -6,10 +6,10 @@ import java.awt.Point;
 
 public class Rect
 {
-    private Point mPoint;
-    private int mWidth = Definitions.MIN_BLOCK_SIZE;
-    private int mHeight = Definitions.MIN_BLOCK_SIZE;
-    private Color mColor;
+    protected Point mPoint;
+    protected int mWidth = Definitions.MIN_BLOCK_SIZE;
+    protected int mHeight = Definitions.MIN_BLOCK_SIZE;
+    protected Color mColor;
     
     public Rect(Point point, Color color)
     {

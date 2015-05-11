@@ -123,7 +123,7 @@ public class Game extends JPanel
     private boolean randomBlock(Blocks block) { return randomBlock(block.getValue()); }
     private boolean randomBlock()
     {
-        return randomBlock(mRandom.nextInt(100) < Definitions.BLOCK_4_SPAWN_CHANCE ? Blocks.BLOCK_4 : Blocks.BLOCK_2);
+        return randomBlock(mRandom.nextInt(100) < Definitions.BLOCK_4_SPAWN_CHANCE ? Blocks.BLOCK_4 : Blocks.BLOCK_2048);
     }
     
     
