@@ -24,9 +24,9 @@ public class NumberedRect extends Rect
     public void draw(Graphics graphics)
     {
         super.draw(graphics);
-        String text = "" + getNumber();
-        graphics.setFont(graphics.getFont().deriveFont(0, Definitions.MIN_BLOCK_SIZE / (text.length())));
         graphics.setColor(Definitions.DEFAULT_BLOCK_FONT_COLOR);
+        String text = "" + getNumber();
+        graphics.setFont(graphics.getFont().deriveFont(0, Definitions.getDefaultBlockFontSize(text)));
 
         // centering the text
         FontMetrics fontMetrics = graphics.getFontMetrics();

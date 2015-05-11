@@ -36,4 +36,7 @@ public class Rect
                 Definitions.MIN_BLOCK_SPACE + y * (Definitions.MIN_BLOCK_SPACE + Definitions.MIN_BLOCK_SIZE)
                 );
     }
+    public int getX() { return mPoint.x; }
+    public int getY() { return mPoint.y; }
+    public Point getPoint() { return mPoint; }
 }

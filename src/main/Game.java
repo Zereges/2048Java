@@ -12,6 +12,7 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
+import anims.Movement;
 import windows.GameWindow;
 import defs.Blocks;
 import defs.Definitions;
@@ -26,10 +27,10 @@ public class Game extends JPanel
     
     private Player mPlayer;
     private GameWindow mWindow;
-    
     private List<Rect> mBackground = new ArrayList<>();
     private NumberedRect[][] mRects = new NumberedRect[Definitions.BLOCK_COUNT_X][Definitions.BLOCK_COUNT_Y];
-    
+    private Animator mAnimator = new Animator(this);
+    private boolean mCanplay = true;
     private Random mRandom = new Random();
 
 
@@ -94,9 +95,41 @@ public class Game extends JPanel
     
     public void play(Direction direction)
     {
+        if (!can_play())
+            return;
         
+        boolean played;
+        // case left
+        for (int y = 0; y < Definitions.BLOCK_COUNT_Y; ++y)
+        {
+            for (int x = 1; x < Definitions.BLOCK_COUNT_X; ++x)
+            {
+                if (mRects[x][y] == null)
+                    continue;
+                int i = x;
+                while (i > 0 && mRects[--i][y] == null); // find closest block
+                if (mRects[i][y] == null || mRects[++i][y] == null)
+                {
+                    moveTo(x, y, i, y);
+                    played = true;
+                }
+            }
+        }
+        mAnimator.startAnimation();
     }
     
+    private boolean can_play()
+    {
+        return mAnimator.canPlay() && mCanplay;
+    }
+
+    private void moveTo(int fromX, int fromY, int toX, int toY)
+    {
+        mAnimator.add(new Movement(mRects[fromX][fromY], Rect.getBlockCoords(toX, toY)));
+        mRects[toX][toY] = mRects[fromX][fromY];
+        mRects[fromX][fromY] = null;
+    }
+
     private boolean spawnBlock(int block, int x, int y)
     {
         if (mRects[x][y] != null)
@@ -123,7 +156,7 @@ public class Game extends JPanel
     private boolean randomBlock(Blocks block) { return randomBlock(block.getValue()); }
     private boolean randomBlock()
     {
-        return randomBlock(mRandom.nextInt(100) < Definitions.BLOCK_4_SPAWN_CHANCE ? Blocks.BLOCK_4 : Blocks.BLOCK_2048);
+        return randomBlock(mRandom.nextInt(100) < Definitions.BLOCK_4_SPAWN_CHANCE ? Blocks.BLOCK_4 : Blocks.BLOCK_2);
     }
     
     

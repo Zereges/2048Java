@@ -31,9 +31,17 @@ public abstract class Definitions
     
     public static final int BLOCK_4_SPAWN_CHANCE = 15;
     
-    public static final Font DEFAULT_BLOCK_FONT = new Font("Arial", 0, MIN_BLOCK_SIZE / 3);
-    public static final Color DEFAULT_BLOCK_FONT_COLOR = Color.WHITE; 
-    
+    public static final Font DEFAULT_BLOCK_FONT = new Font("Courier New", 0, MIN_BLOCK_SIZE / 3);
+    public static final Color DEFAULT_BLOCK_FONT_COLOR = Color.WHITE;
+    public static int getDefaultBlockFontSize(String text)
+    {
+        double RATIO = 0.1;
+        return (int) ((1-RATIO + RATIO * text.length()) * (Definitions.MIN_BLOCK_SIZE) / text.length());
+    }
+    public static final int FRAMES_PER_SECOND = 60;
+
+    public static final double DEFAULT_MOVE_SPEED = 20;
+        
     /**
      * Calculates minimal width of the game board.
      * @return Minimal width of the game board.
@@ -70,7 +78,7 @@ public abstract class Definitions
 
         // others are same as the previous one
     };
-    
+
     public static Color getBlockColor(int block)
     {
         return block < BLOCK_COLORS.length ? BLOCK_COLORS[block] : BLOCK_COLORS[BLOCK_COLORS.length - 1]; 
