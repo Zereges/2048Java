@@ -34,6 +34,8 @@ public class Game extends JPanel
     private Animator mAnimator = new Animator(this);
     private boolean mCanplay = true;
     private Random mRandom = new Random();
+    private int mScore = 0;
+    private boolean mWon = false;
 
 
     private class MyDispatcher implements KeyEventDispatcher
@@ -198,8 +200,8 @@ public class Game extends JPanel
     
     private void mergeTo(int fromX, int fromY, int toX, int toY)
     {
-        // Animation will handle incrementing number after animation processes.
-        mAnimator.add(new Merge(mRects[fromX][fromY], mRects[toX][toY], this, fromX, fromY));     
+        // Animation will handle incrementing number and deleting merged block after animation processes
+        mAnimator.add(new Merge(mRects[fromX][fromY], mRects[toX][toY], this, fromX, fromY));
     }
 
     public boolean canMerge(NumberedRect r1, NumberedRect r2)
@@ -276,6 +278,12 @@ public class Game extends JPanel
             for (NumberedRect rect : rects)
                 if (rect != null)
                     rect.draw(graphics);
+    }
+
+    public void addScore(int number)
+    {
+        mScore += number;
+        mWindow.setScore(mScore + (mWon ? " (W)" : ""));
     }
 
 }

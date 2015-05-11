@@ -36,6 +36,7 @@ public class Merge extends Movement
         {
             mGame.removeBlock(mFromX, mFromY);
             mTargetRect.nextNumber();
+            mGame.addScore(mTargetRect.getNumber());
             return true;
         }
         return false;

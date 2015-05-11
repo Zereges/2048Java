@@ -69,4 +69,9 @@ public class GameWindow
             mFrame.setVisible(true);
         });
     }
+
+    public void setScore(String score)
+    {
+        mScore.setText("Score: " + score);
+    }
 }
