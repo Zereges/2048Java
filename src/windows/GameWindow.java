@@ -67,8 +67,5 @@ public class GameWindow extends Window
         mFrame.pack();
     }
     
-    public void setScore(String score)
-    {
-        mScore.setText("Score: " + score);
-    }
+    public ScoreLabel getScoreLabel() { return mScore; }
 }

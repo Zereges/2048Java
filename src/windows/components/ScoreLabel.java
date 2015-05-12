@@ -14,7 +14,6 @@ public class ScoreLabel extends JLabel {
      */
     public ScoreLabel()
     {
-        mScore = 0;
         setText("Score: " + mScore);
     }
     
@@ -36,9 +35,17 @@ public class ScoreLabel extends JLabel {
      */
     public int getScore() { return mScore; }
     
+    /**
+     * Sets whether player won this game.
+     * @param won True if player won this game, false otherwise.
+     */
+    public void setWon(boolean won) { mWon = won; } 
     
-    private void updateScore() { setText("Score: " + mScore); }
+    private void updateScore() { setText("Score: " + mScore + (mWon ? " (Won)" : "")); }
     
     /** Current player's score. */
-    private int mScore;
+    private int mScore = 0;
+    
+    /** Indicates, whether player won this game. */
+    private boolean mWon = false;
 }

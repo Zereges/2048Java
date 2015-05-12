@@ -316,7 +316,8 @@ public class Game extends JPanel
         mWon = false;
         mStartTime = System.currentTimeMillis() / 1000;
         mScore = 0;
-        mWindow.setScore(mScore + "");
+        mWindow.getScoreLabel().setScore(mScore);
+        mWindow.getScoreLabel().setWon(false);
         mPlayer.getStats().restart(mStartTime);
     }
     
@@ -345,7 +346,7 @@ public class Game extends JPanel
     public void addScore(int number)
     {
         mScore += number;
-        mWindow.setScore(mScore + (mWon ? " (W)" : ""));
+        mWindow.getScoreLabel().addScore(number);
     }
     
     public boolean isGameOver()
