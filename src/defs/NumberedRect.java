@@ -23,7 +23,7 @@ public class NumberedRect extends Rect
         super(point, Definitions.getBlockColor(number), width, height);
         mNumber = number;
         mShownNumber = (int) Math.pow(2, mNumber);
-        int mFontSize = fontSize;
+        mFontSize = fontSize;
     }
     
     public int getNumber()

@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -9,13 +8,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import anims.Merge;
 import anims.Movement;
 import anims.Spawn;
@@ -260,6 +253,8 @@ public class Game extends JPanel
         mAnimator.addAndStart(new Spawn(mRects[x][y], Rect.getBlockCoords(x, y)));
         return true;
     }
+    
+    @SuppressWarnings("unused")
     private boolean spawnBlock(Blocks block, int x, int y) { return spawnBlock(block.getValue(), x, y); }
 
     private boolean randomBlock(int block)

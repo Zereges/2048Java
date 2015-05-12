@@ -1,9 +1,6 @@
 package anims;
 
-import java.awt.Point;
 import java.util.List;
-
-import main.Game;
 import defs.NumberedRect;
 
 public class Merge extends Movement

@@ -3,7 +3,6 @@ package defs;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 
 /**
  * @brief Definitions class to store constants and simple constants manipulating functions. 
