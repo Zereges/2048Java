@@ -6,7 +6,7 @@ import javax.swing.SwingUtilities;
 
 public class Window
 {
-    private JFrame mFrame;
+    protected JFrame mFrame;
     public Window(String title)
     {
         mFrame = new JFrame(title);

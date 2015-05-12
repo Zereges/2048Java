@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import windows.components.FancyTextField;
 import defs.Definitions;
@@ -19,7 +18,6 @@ import defs.UnrecoverableType;
  */
 public class PlayerPickerWindow extends Window
 {
-    private JFrame mFrame = new JFrame("2048 Game");
     private JLabel mInfoLabel = new JLabel("Select a profile to load. Profiles are saved in " + Definitions.SAVES_DIRECTORY + " folder.");
     private JComboBox<Player> mPlayerProfiles = new JComboBox<>();
     private FancyTextField mNewProfileName = new FancyTextField("Type in desired name", false);
@@ -75,10 +73,7 @@ public class PlayerPickerWindow extends Window
         listPlayerProfiles();
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
-        mFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mFrame.setLayout(layout);
-        mFrame.setResizable(false);
-        mFrame.setLocationByPlatform(true);
         
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridwidth = GridBagConstraints.REMAINDER;

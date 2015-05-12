@@ -8,7 +8,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 
 import defs.Definitions;
@@ -18,7 +17,6 @@ import main.Game;
 
 public class GameWindow extends Window
 {
-    private JFrame mFrame;
     private Game mGame;
     private Player mPlayer;
     private ScoreLabel mScore = new ScoreLabel();
