@@ -227,6 +227,7 @@ public class Game extends JPanel
     public void won()
     {
         mWon = true;
+        mWindow.getScoreLabel().setWon(true);
         mPlayer.getStats().win(mStartTime);
     }
 
@@ -313,8 +314,8 @@ public class Game extends JPanel
         for (int i = 0; i < Definitions.DEFAULT_START_BLOCKS; ++i)
             randomBlock();
         mCanplay = true;
-        mWon = false;
         mStartTime = System.currentTimeMillis() / 1000;
+        mWon = false;
         mScore = 0;
         mWindow.getScoreLabel().setScore(mScore);
         mWindow.getScoreLabel().setWon(false);
