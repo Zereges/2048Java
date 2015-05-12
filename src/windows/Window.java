@@ -35,4 +35,14 @@ public class Window
             mFrame.setVisible(true);
         });
     }
+    
+    public void hide()
+    {
+        mFrame.setVisible(false);
+    }
+    
+    public void close()
+    {
+        mFrame.dispose();
+    }
 }

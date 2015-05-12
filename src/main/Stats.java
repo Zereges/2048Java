@@ -11,6 +11,9 @@ public class Stats implements Serializable
     private long mCurrentStats[] = new long[StatTypes.values().length];
     private long mGlobalStats[] = new long[StatTypes.values().length];
     
+    public long[] getCurrentStats() { return mCurrentStats; }
+    public long[] getGlobalStats() { return mGlobalStats; }
+    
     public void play(Direction direction)
     {
         switch (direction)

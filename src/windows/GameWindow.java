@@ -23,6 +23,7 @@ public class GameWindow extends Window
     private JMenuBar mMenuBar = new JMenuBar();
     private JButton mStats = new JButton("Show Statistics");
     private JButton mRestart = new JButton("Restart");
+    private StatsWindow mStatsWindow;
 
     /**
      * Constructs game window for specified player profile.
@@ -37,6 +38,7 @@ public class GameWindow extends Window
             public void windowClosing(WindowEvent e)
             {
                 mPlayer.save();
+                mStatsWindow.close();
                 mFrame.dispose();
             }
         });
@@ -48,6 +50,11 @@ public class GameWindow extends Window
         mMenuBar.add(mRestart);
         
         mRestart.addActionListener((ActionEvent e) -> { mGame.restart(); });
+        mStats.addActionListener((ActionEvent e) -> {
+            mStatsWindow.show();
+        });
+        mStatsWindow = new StatsWindow("2048 Stats for " + mPlayer, mPlayer.getStats());
+
 
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
