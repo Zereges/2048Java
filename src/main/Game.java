@@ -35,6 +35,7 @@ public class Game extends JPanel
     private GameWindow mWindow;
     private List<Rect> mBackground = new ArrayList<>();
     private NumberedRect[][] mRects = new NumberedRect[Definitions.BLOCK_COUNT_X][Definitions.BLOCK_COUNT_Y];
+    private List<NumberedRect> mAnimatedRects = new ArrayList<>();
     private Animator mAnimator = new Animator(this);
     private boolean mCanplay = true;
     private Random mRandom = new Random();
@@ -227,8 +228,11 @@ public class Game extends JPanel
 
     private void mergeTo(int fromX, int fromY, int toX, int toY)
     {
+        mAnimator.add(new Merge(mRects[fromX][fromY], mRects[toX][toY], mAnimatedRects));
+        mAnimatedRects.add(mRects[fromX][fromY]);
         mRects[fromX][fromY] = null;
-        mRects[toX][toY].nextNumber();
+        mRects[toX][toY].nextNumber(false);
+        addScore(2 * mRects[toX][toY].getNumber());
     }
 
     public boolean canMerge(NumberedRect r1, NumberedRect r2)
@@ -253,7 +257,6 @@ public class Game extends JPanel
         if (mRects[x][y] != null)
             return false;
         mRects[x][y] = new NumberedRect(Rect.getBlockCoords(x, y), block, 0, 0, 0);
-        
         mAnimator.addAndStart(new Spawn(mRects[x][y], Rect.getBlockCoords(x, y)));
         return true;
     }
@@ -277,9 +280,15 @@ public class Game extends JPanel
         return randomBlock(mRandom.nextInt(100) < Definitions.BLOCK_4_SPAWN_CHANCE ? Blocks.BLOCK_4 : Blocks.BLOCK_2);
     }
     
-    public void removeBlock(int x, int y)
+    public void removeBlock(NumberedRect rect)
     {
-        mRects[x][y] = null;
+        for (int x = 0; x < Definitions.BLOCK_COUNT_X; ++x)
+            for (int y = 0; y < Definitions.BLOCK_COUNT_Y; ++y)
+                if (mRects[x][y] == rect)
+                {
+                    mRects[x][y] = null;
+                    return;
+                }
     }
     
     public void restart()
@@ -314,6 +323,8 @@ public class Game extends JPanel
             for (NumberedRect rect : rects)
                 if (rect != null)
                     rect.draw(graphics);
+        for (NumberedRect rect : mAnimatedRects)
+            rect.draw(graphics);
     }
 
     public void addScore(int number)

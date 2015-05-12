@@ -1,6 +1,7 @@
 package anims;
 
 import java.awt.Point;
+import java.util.List;
 
 import main.Game;
 import defs.NumberedRect;
@@ -8,25 +9,21 @@ import defs.NumberedRect;
 public class Merge extends Movement
 {
     NumberedRect mTargetRect;
-    Game mGame;
-    int mFromX, mFromY;
+    List<NumberedRect> mAnimatedRects;
     
-    public Merge(NumberedRect source, NumberedRect targetRect, Game game, int fromX, int fromY, int speed)
+    public Merge(NumberedRect source, NumberedRect targetRect, List<NumberedRect> animatedRects, int speed)
     {
         super(source, targetRect.getPoint(), speed);
         mTargetRect = targetRect;
-        mGame = game;
-        mFromX = fromX;
-        mFromY = fromY;
+        mAnimatedRects = animatedRects;
+
     }
 
-    public Merge(NumberedRect source, NumberedRect targetRect, Game game, int fromX, int fromY)
+    public Merge(NumberedRect source, NumberedRect targetRect, List<NumberedRect> animatedRects)
     {
         super(source, targetRect.getPoint());
         mTargetRect = targetRect;
-        mGame = game;
-        mFromX = fromX;
-        mFromY = fromY;
+        mAnimatedRects = animatedRects;
     }
     
     @Override
@@ -34,9 +31,8 @@ public class Merge extends Movement
     {
         if (super.animate())
         {
-            mGame.removeBlock(mFromX, mFromY);
-            mTargetRect.nextNumber();
-            mGame.addScore(mTargetRect.getNumber());
+            mAnimatedRects.clear();
+            mTargetRect.updateShownNumber();
             return true;
         }
         return false;

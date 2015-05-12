@@ -8,24 +8,32 @@ import java.awt.geom.Rectangle2D;
 public class NumberedRect extends Rect
 {
     protected int mNumber;
+    protected int mShownNumber;
     protected int mFontSize = Definitions.getDefaultBlockFontSize("" + mNumber);
     
     public NumberedRect(Point point, int number)
     {
         super(point, Definitions.getBlockColor(number));
         mNumber = number;
+        mShownNumber = (int) Math.pow(2, mNumber);
     }
 
     public NumberedRect(Point point, int number, int width, int height, int fontSize)
     {
         super(point, Definitions.getBlockColor(number), width, height);
         mNumber = number;
+        mShownNumber = (int) Math.pow(2, mNumber);
         int mFontSize = fontSize;
     }
     
     public int getNumber()
     {
-        return (int) Math.pow(2, mNumber);
+        return mNumber;
+    }
+    
+    public int getShownNumber()
+    {
+        return mShownNumber;
     }
     
     @Override
@@ -33,7 +41,7 @@ public class NumberedRect extends Rect
     {
         super.draw(graphics);
         graphics.setColor(Definitions.DEFAULT_BLOCK_FONT_COLOR);
-        String text = "" + getNumber();
+        String text = "" + mShownNumber;
         graphics.setFont(graphics.getFont().deriveFont(0, mFontSize));
 
         // centering the text
@@ -48,5 +56,15 @@ public class NumberedRect extends Rect
     public int getCurrentFontSize() { return mFontSize; }
     public void setCurrentFontSize(int fontSize) { mFontSize = fontSize; }
 
-    public void nextNumber() { mColor = Definitions.getBlockColor(++mNumber); }
+    public void nextNumber(boolean withUpdate)
+    {
+        ++mNumber;
+        if (withUpdate)
+            updateShownNumber();
+    }
+    public void updateShownNumber()
+    {
+        mColor = Definitions.getBlockColor(mNumber);
+        mShownNumber = (int) Math.pow(2, mNumber);
+    }
 }    
