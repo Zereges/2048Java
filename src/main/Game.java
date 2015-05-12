@@ -197,6 +197,10 @@ public class Game extends JPanel
         }
 
         mAnimator.startAnimation();
+        if (played)
+        {
+            mPlayer.getStats().play(direction);
+        }
         onTurnEnd(played);
     }
     

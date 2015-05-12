@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -36,6 +38,14 @@ public class GameWindow
         mFrame = new JFrame("2048 Game (Playing as " + mPlayer + ")");
         mFrame.setResizable(false);
         mFrame.setLocationByPlatform(true);
+        mFrame.addWindowListener(new WindowAdapter(){
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                mPlayer.save();
+                mFrame.dispose();
+            }
+        });
         mGame = new Game(mPlayer, this);
         mGame.setPreferredSize(Definitions.getMinDimension());
         mGame.setSize(Definitions.getMinDimension());

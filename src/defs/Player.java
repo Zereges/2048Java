@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import main.Stats;
+
 /**
  * @brief Represents player profile
  */
@@ -25,6 +27,7 @@ public class Player implements Serializable
     public Player(String player_name)
     {
         mPlayerName = player_name;
+        mStats = new Stats();
     }
     
     /**
@@ -36,6 +39,7 @@ public class Player implements Serializable
     {
         try (ObjectOutputStream filestream = new ObjectOutputStream(new FileOutputStream(getPlayerFile())))
         {
+            getStats().resetCurrent();
             filestream.writeObject(this);
             return true;
         }
@@ -116,6 +120,9 @@ public class Player implements Serializable
     
     /** Name of the player. */
     private String mPlayerName;
+    private Stats mStats;
+    
+    public Stats getStats() { return mStats; }
     
     /**
      * Converts player to string from its name.
