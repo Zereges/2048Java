@@ -221,6 +221,13 @@ public class Game extends JPanel
             return;
         mCanplay = false;
         mWindow.showWarning("Game Over!", "Press Restart to play again.");
+        mPlayer.getStats().lose(mStartTime);
+    }
+    
+    public void won()
+    {
+        mWon = true;
+        mPlayer.getStats().win(mStartTime);
     }
 
     private void mergeTo(int fromX, int fromY, int toX, int toY)
@@ -229,7 +236,13 @@ public class Game extends JPanel
         mAnimatedRects.add(mRects[fromX][fromY]);
         mRects[fromX][fromY] = null;
         mRects[toX][toY].nextNumber(false);
-        addScore(2 * mRects[toX][toY].getNumber());
+        int number = 2 * mRects[toX][toY].getNumber();
+        addScore(number);
+
+        mPlayer.getStats().merge();
+        mPlayer.getStats().score(number);
+        mPlayer.getStats().highestScore(mScore);
+        mPlayer.getStats().maximalBlock(number);
     }
 
     public boolean canMerge(NumberedRect r1, NumberedRect r2)
@@ -247,6 +260,8 @@ public class Game extends JPanel
         mAnimator.add(new Movement(mRects[fromX][fromY], Rect.getBlockCoords(toX, toY)));
         mRects[toX][toY] = mRects[fromX][fromY];
         mRects[fromX][fromY] = null;
+        
+        mPlayer.getStats().move();
     }
 
     private boolean spawnBlock(int block, int x, int y)
@@ -301,7 +316,8 @@ public class Game extends JPanel
         mWon = false;
         mStartTime = System.currentTimeMillis() / 1000;
         mScore = 0;
-        mWindow.setScore(mScore + "");        
+        mWindow.setScore(mScore + "");
+        mPlayer.getStats().restart(mStartTime);
     }
     
     @Override

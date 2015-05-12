@@ -37,4 +37,53 @@ public class Stats implements Serializable
     }
     
     public void resetCurrent() { mCurrentStats = new long[StatTypes.values().length]; }
+
+    public void move()
+    {
+        ++mCurrentStats[StatTypes.BLOCKS_MOVED.getIndex()];
+        ++mGlobalStats[StatTypes.BLOCKS_MOVED.getIndex()];
+    }
+
+    public void merge()
+    {
+        ++mCurrentStats[StatTypes.BLOCKS_MERGED.getIndex()];
+        ++mGlobalStats[StatTypes.BLOCKS_MERGED.getIndex()];
+    }
+
+    public void restart(long mStartTime)
+    {
+        ++mCurrentStats[StatTypes.GAME_RESTARTS.getIndex()];
+        ++mGlobalStats[StatTypes.GAME_RESTARTS.getIndex()];
+    }
+
+    public void win(long mStartTime)
+    {
+        ++mCurrentStats[StatTypes.GAME_WINS.getIndex()];
+        ++mGlobalStats[StatTypes.GAME_WINS.getIndex()];
+    }
+
+    public void lose(long mStartTime)
+    {
+        ++mCurrentStats[StatTypes.GAME_LOSES.getIndex()];
+        ++mGlobalStats[StatTypes.GAME_LOSES.getIndex()];
+    }
+
+    public void score(int number)
+    {
+        mCurrentStats[StatTypes.TOTAL_SCORE.getIndex()] += number;
+        mGlobalStats[StatTypes.TOTAL_SCORE.getIndex()] += number;
+    }
+
+    public void highestScore(int mScore)
+    {
+        mCurrentStats[StatTypes.HIGHEST_SCORE.getIndex()] = Math.max(mCurrentStats[StatTypes.HIGHEST_SCORE.getIndex()], mScore);
+        mGlobalStats[StatTypes.HIGHEST_SCORE.getIndex()] = Math.max(mGlobalStats[StatTypes.HIGHEST_SCORE.getIndex()], mScore);
+    }
+    
+    public void maximalBlock(int number)
+    {
+        mCurrentStats[StatTypes.MAXIMAL_BLOCK.getIndex()] = Math.max(mCurrentStats[StatTypes.MAXIMAL_BLOCK.getIndex()], number);
+        mGlobalStats[StatTypes.MAXIMAL_BLOCK.getIndex()] = Math.max(mGlobalStats[StatTypes.MAXIMAL_BLOCK.getIndex()], number);
+    }
+
 }
