@@ -4,14 +4,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
 import windows.components.FancyTextField;
 import defs.Definitions;
 import defs.Player;
@@ -21,7 +17,7 @@ import defs.UnrecoverableType;
 /**
  * @brief Represents window used for picking player profile.
  */
-public class PlayerPickerWindow
+public class PlayerPickerWindow extends Window
 {
     private JFrame mFrame = new JFrame("2048 Game");
     private JLabel mInfoLabel = new JLabel("Select a profile to load. Profiles are saved in " + Definitions.SAVES_DIRECTORY + " folder.");
@@ -32,6 +28,7 @@ public class PlayerPickerWindow
     private JButton mStartGame = new JButton("Load profile & Start game");
     public PlayerPickerWindow() throws UnrecoverableException
     {
+        super(Definitions.WINDOW_TITLE, false);
         // New profile name
         mNewProfile.addActionListener((ActionEvent e) -> {
             if (!mNewProfileName.isValid())
@@ -58,7 +55,7 @@ public class PlayerPickerWindow
         
         // Delete profile button
         mDeleteProfile.addActionListener((ActionEvent e) -> {
-            if (!confirmDelete())
+            if (!showConfirm("Are you sure?", "This will delete all the contents from the disc."))
                 return;
             
             Player p = mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex());
@@ -112,14 +109,7 @@ public class PlayerPickerWindow
 
         mFrame.pack();
     }
-    
-    public void show()
-    {
-        SwingUtilities.invokeLater(() -> {
-           mFrame.setVisible(true); 
-        });
-    }
-    
+
     private void listPlayerProfiles() throws UnrecoverableException
     {
         File statsDir = new File(Definitions.SAVES_DIRECTORY);
@@ -148,11 +138,5 @@ public class PlayerPickerWindow
             mStartGame.setEnabled(false);
             mDeleteProfile.setEnabled(false);
         }        
-    }
-    
-    private boolean confirmDelete()
-    {
-        return JOptionPane.showConfirmDialog(null, "This will delete whole profile contents from the disk.", "Are you sure?",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION;
     }
 }

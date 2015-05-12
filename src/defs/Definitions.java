@@ -81,6 +81,8 @@ public abstract class Definitions
 
     public static final int DEFAULT_START_BLOCKS = 2;
 
+    public static final String WINDOW_TITLE = "2048 Game";
+
     public static Color getBlockColor(int block)
     {
         return block < BLOCK_COLORS.length ? BLOCK_COLORS[block] : BLOCK_COLORS[BLOCK_COLORS.length - 1]; 

@@ -10,15 +10,13 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 import defs.Definitions;
 import defs.Player;
 import windows.components.ScoreLabel;
 import main.Game;
 
-public class GameWindow
+public class GameWindow extends Window
 {
     private JFrame mFrame;
     private Game mGame;
@@ -34,10 +32,8 @@ public class GameWindow
      */
     public GameWindow(Player player)
     {
+        super(Definitions.WINDOW_TITLE + " (Playing as " + player + ")", false);
         mPlayer = player;
-        mFrame = new JFrame("2048 Game (Playing as " + mPlayer + ")");
-        mFrame.setResizable(false);
-        mFrame.setLocationByPlatform(true);
         mFrame.addWindowListener(new WindowAdapter(){
             @Override
             public void windowClosing(WindowEvent e)
@@ -57,7 +53,6 @@ public class GameWindow
 
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
-        mFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mFrame.setLayout(layout);
         
         constraints.fill = GridBagConstraints.BOTH;
@@ -74,20 +69,8 @@ public class GameWindow
         mFrame.pack();
     }
     
-    void show()
-    {
-        SwingUtilities.invokeLater(() -> {
-            mFrame.setVisible(true);
-        });
-    }
-
     public void setScore(String score)
     {
         mScore.setText("Score: " + score);
-    }
-    
-    public void showWarning(String title, String message)
-    {
-        JOptionPane.showMessageDialog(null, message, title, JOptionPane.PLAIN_MESSAGE);        
     }
 }
