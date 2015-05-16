@@ -10,6 +10,7 @@ public class Stats implements Serializable
     private static final long serialVersionUID = 231497236618423832L;
     private long mCurrentStats[] = new long[StatTypes.values().length];
     private long mGlobalStats[] = new long[StatTypes.values().length];
+    private long mLastUpdate;
     
     public long[] getCurrentStats() { return mCurrentStats; }
     public long[] getGlobalStats() { return mGlobalStats; }
@@ -39,7 +40,10 @@ public class Stats implements Serializable
         ++mGlobalStats[StatTypes.TOTAL_MOVES.getIndex()];
     }
     
-    public void resetCurrent() { mCurrentStats = new long[StatTypes.values().length]; }
+    public void resetCurrent()
+    {
+        mCurrentStats = new long[StatTypes.values().length];
+    }
 
     public void move()
     {
@@ -53,19 +57,19 @@ public class Stats implements Serializable
         ++mGlobalStats[StatTypes.BLOCKS_MERGED.getIndex()];
     }
 
-    public void restart(long mStartTime)
+    public void restart()
     {
         ++mCurrentStats[StatTypes.GAME_RESTARTS.getIndex()];
         ++mGlobalStats[StatTypes.GAME_RESTARTS.getIndex()];
     }
 
-    public void win(long mStartTime)
+    public void win()
     {
         ++mCurrentStats[StatTypes.GAME_WINS.getIndex()];
         ++mGlobalStats[StatTypes.GAME_WINS.getIndex()];
     }
 
-    public void lose(long mStartTime)
+    public void lose()
     {
         ++mCurrentStats[StatTypes.GAME_LOSES.getIndex()];
         ++mGlobalStats[StatTypes.GAME_LOSES.getIndex()];
@@ -88,5 +92,12 @@ public class Stats implements Serializable
         mCurrentStats[StatTypes.MAXIMAL_BLOCK.getIndex()] = Math.max(mCurrentStats[StatTypes.MAXIMAL_BLOCK.getIndex()], number);
         mGlobalStats[StatTypes.MAXIMAL_BLOCK.getIndex()] = Math.max(mGlobalStats[StatTypes.MAXIMAL_BLOCK.getIndex()], number);
     }
-
+    public void updateTime(long startTime)
+    {
+        long now = System.currentTimeMillis();
+        mCurrentStats[StatTypes.TOTAL_TIME_PLAYED.getIndex()] = (now - startTime) / 1000;
+        mGlobalStats[StatTypes.TOTAL_TIME_PLAYED.getIndex()] += (now - mLastUpdate) / 1000;
+        setLastUpdate(now);
+    }
+    public void setLastUpdate(long now) { mLastUpdate = now; }
 }

@@ -37,6 +37,7 @@ public class GameWindow extends Window
             @Override
             public void windowClosing(WindowEvent e)
             {
+                mGame.updateStatsTime();
                 mPlayer.save();
                 mStatsWindow.close();
                 mFrame.dispose();
@@ -51,6 +52,7 @@ public class GameWindow extends Window
         
         mRestart.addActionListener((ActionEvent e) -> { mGame.restart(); });
         mStats.addActionListener((ActionEvent e) -> {
+            mGame.updateStatsTime();
             mStatsWindow.show();
         });
         mStatsWindow = new StatsWindow("2048 Stats for " + mPlayer, mPlayer.getStats());

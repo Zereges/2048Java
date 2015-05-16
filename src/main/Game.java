@@ -34,7 +34,7 @@ public class Game extends JPanel
     private Random mRandom = new Random();
     private int mScore = 0;
     private boolean mWon = false;
-    private long mStartTime;
+    private long mStartTime = System.currentTimeMillis();
 
     private class MyDispatcher implements KeyEventDispatcher
     {
@@ -221,14 +221,14 @@ public class Game extends JPanel
             return;
         mCanplay = false;
         mWindow.showWarning("Game Over!", "Press Restart to play again.");
-        mPlayer.getStats().lose(mStartTime);
+        mPlayer.getStats().lose();
     }
     
     public void won()
     {
         mWon = true;
         mWindow.getScoreLabel().setWon(true);
-        mPlayer.getStats().win(mStartTime);
+        mPlayer.getStats().win();
     }
 
     private void mergeTo(int fromX, int fromY, int toX, int toY)
@@ -314,12 +314,12 @@ public class Game extends JPanel
         for (int i = 0; i < Definitions.DEFAULT_START_BLOCKS; ++i)
             randomBlock();
         mCanplay = true;
-        mStartTime = System.currentTimeMillis() / 1000;
+        mStartTime = System.currentTimeMillis();
         mWon = false;
         mScore = 0;
         mWindow.getScoreLabel().setScore(mScore);
         mWindow.getScoreLabel().setWon(false);
-        mPlayer.getStats().restart(mStartTime);
+        mPlayer.getStats().restart();
     }
     
     @Override
@@ -374,6 +374,10 @@ public class Game extends JPanel
                 return false;
         
         return true;
-        
+    }
+    
+    public void updateStatsTime()
+    {
+        mPlayer.getStats().updateTime(mStartTime);
     }
 }
