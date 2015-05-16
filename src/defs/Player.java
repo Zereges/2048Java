@@ -39,7 +39,7 @@ public class Player implements Serializable
     {
         try (ObjectOutputStream filestream = new ObjectOutputStream(new FileOutputStream(getPlayerFile())))
         {
-            getStats().resetCurrent();
+            mStats.resetCurrent();
             filestream.writeObject(this);
             return true;
         }
@@ -67,11 +67,16 @@ public class Player implements Serializable
      * @return Player class representing found profile in given file. If no profile could be found, returns null.
      * @throws IOException
      */
-    public static Player load(File file)
+    public static Player load(String playerName)
     {
+        File file = new File(Definitions.SAVES_DIRECTORY, playerName + Definitions.SAVES_EXTENSION);
+        if (!file.exists())
+            return null;
         try (ObjectInputStream filestream = new ObjectInputStream(new FileInputStream(file)))
         {
-            return (Player) filestream.readObject();
+            Player player = (Player) filestream.readObject();
+            player.getStats().setLastUpdate(System.currentTimeMillis());
+            return player;
         }
         catch (IOException | ClassNotFoundException e)
         {
@@ -132,5 +137,11 @@ public class Player implements Serializable
     public String toString()
     {
         return mPlayerName;
+    }
+
+    public static void delete(String playerName)
+    {
+        File file = new File(Definitions.SAVES_DIRECTORY, playerName + Definitions.SAVES_EXTENSION);
+        file.delete();
     }
 }

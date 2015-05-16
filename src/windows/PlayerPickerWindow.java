@@ -19,7 +19,7 @@ import defs.UnrecoverableType;
 public class PlayerPickerWindow extends Window
 {
     private JLabel mInfoLabel = new JLabel("Select a profile to load. Profiles are saved in " + Definitions.SAVES_DIRECTORY + " folder.");
-    private JComboBox<Player> mPlayerProfiles = new JComboBox<>();
+    private JComboBox<String> mPlayerProfiles = new JComboBox<>();
     private FancyTextField mNewProfileName = new FancyTextField("Type in desired name", false);
     private JButton mNewProfile = new JButton("Create new profile");
     private JButton mDeleteProfile = new JButton("Delete profile");
@@ -46,7 +46,7 @@ public class PlayerPickerWindow extends Window
                     mStartGame.setEnabled(true);
                     mDeleteProfile.setEnabled(true);
                 }
-                mPlayerProfiles.addItem(p);
+                mPlayerProfiles.addItem(p.getName());
                 mPlayerProfiles.setSelectedItem(name);
             }
         });
@@ -56,9 +56,8 @@ public class PlayerPickerWindow extends Window
             if (!showConfirm("Are you sure?", "This will delete all the contents from the disc."))
                 return;
             
-            Player p = mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex());
-            p.delete();
-            mPlayerProfiles.removeItem(p);
+            Player.delete(mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex()));
+            mPlayerProfiles.removeItemAt(mPlayerProfiles.getSelectedIndex());
             if (mPlayerProfiles.getItemCount() == 0)
                 noProfiles();
         });
@@ -66,7 +65,7 @@ public class PlayerPickerWindow extends Window
         // Start game button
         mStartGame.addActionListener((ActionEvent e) -> {
             mFrame.dispose();
-            GameWindow window = new GameWindow(mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex()));
+            GameWindow window = new GameWindow(Player.load(mPlayerProfiles.getItemAt(mPlayerProfiles.getSelectedIndex())));
             window.show();
         });
         
@@ -118,7 +117,11 @@ public class PlayerPickerWindow extends Window
         else
         {
             for (int i = 0; i < files.length; ++i)
-                mPlayerProfiles.addItem(Player.load(files[i]));
+            {
+                String playerName = files[i].getName();
+                playerName = playerName.substring(0, playerName.lastIndexOf('.'));
+                mPlayerProfiles.addItem(playerName);
+            }
         }
     }
     
@@ -126,7 +129,7 @@ public class PlayerPickerWindow extends Window
     {
         if (mPlayerProfiles.getItemCount() == 0)
         {
-            Player message = new Player("No profiles found");
+            String message = "No profiles found";
             mPlayerProfiles.addItem(message);
             mPlayerProfiles.setSelectedItem(message);
             mPlayerProfiles.setEnabled(false);
