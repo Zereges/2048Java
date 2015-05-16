@@ -221,8 +221,10 @@ public class Game extends JPanel
         if (mWon)
             return;
         mCanplay = false;
-        mWindow.showWarning("Game Over!", "Press Restart to play again.");
         mPlayer.getStats().lose();
+        mPlayer.getAchievements().lose(mStartTime, this);
+
+        mWindow.showWarning("Game Over!", "Press Restart to play again.");
     }
     
     public void won()
@@ -230,6 +232,7 @@ public class Game extends JPanel
         mWon = true;
         mWindow.getScoreLabel().setWon(true);
         mPlayer.getStats().win();
+        
     }
 
     private void mergeTo(int fromX, int fromY, int toX, int toY)
@@ -238,13 +241,21 @@ public class Game extends JPanel
         mAnimatedRects.add(mRects[fromX][fromY]);
         mRects[fromX][fromY] = null;
         mRects[toX][toY].nextNumber(false);
-        int number = 2 * mRects[toX][toY].getNumber();
+        int number = 2 * mRects[toX][toY].getShownNumber();
         addScore(number);
 
         mPlayer.getStats().merge();
         mPlayer.getStats().score(number);
         mPlayer.getStats().highestScore(mScore);
         mPlayer.getStats().maximalBlock(number);
+
+        mPlayer.getAchievements().merge(number);
+        
+        if (!mWon && number == Definitions.GAME_WIN_NUMBER)
+        {
+            won();
+            mPlayer.getAchievements().won(mStartTime, this);
+        }
     }
 
     public boolean canMerge(NumberedRect r1, NumberedRect r2)
@@ -276,7 +287,7 @@ public class Game extends JPanel
     }
     
     @SuppressWarnings("unused")
-    private boolean spawnBlock(Blocks block, int x, int y) { return spawnBlock(block.getValue(), x, y); }
+    private boolean spawnBlock(Blocks block, int x, int y) { return spawnBlock(block.getId(), x, y); }
 
     private boolean randomBlock(int block)
     {
@@ -290,7 +301,7 @@ public class Game extends JPanel
         int pos = poss.get(mRandom.nextInt(poss.size()));
         return spawnBlock(block, pos / Definitions.BLOCK_COUNT_X, pos % Definitions.BLOCK_COUNT_Y);
     }
-    private boolean randomBlock(Blocks block) { return randomBlock(block.getValue()); }
+    private boolean randomBlock(Blocks block) { return randomBlock(block.getId()); }
     private boolean randomBlock()
     {
         return randomBlock(mRandom.nextInt(100) < Definitions.BLOCK_4_SPAWN_CHANCE ? Blocks.BLOCK_4 : Blocks.BLOCK_2);
@@ -380,5 +391,18 @@ public class Game extends JPanel
     public void updateStatsTime()
     {
         mPlayer.getStats().updateTime(mStartTime);
+    }
+
+    public boolean hasBlock(Blocks block)
+    {
+        return hasBlock(block.getId());
+    }
+    public boolean hasBlock(int block)
+    {
+        for (int x = 0; x < Definitions.BLOCK_COUNT_X; ++x)
+            for (int y = 0; y < Definitions.BLOCK_COUNT_Y; ++y)
+                if (mRects[x][y].getNumber() == block)
+                    return true;
+        return false;
     }
 }

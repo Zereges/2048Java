@@ -22,8 +22,10 @@ public class GameWindow extends Window
     private ScoreLabel mScore = new ScoreLabel();
     private JMenuBar mMenuBar = new JMenuBar();
     private JButton mStats = new JButton("Show Statistics");
+    private JButton mAchievements = new JButton("Show Achievements");
     private JButton mRestart = new JButton("Restart");
     private StatsWindow mStatsWindow;
+    private AchievementsWindow mAchievementsWindow;
 
     /**
      * Constructs game window for specified player profile.
@@ -40,6 +42,7 @@ public class GameWindow extends Window
                 mGame.updateStatsTime();
                 mPlayer.save();
                 mStatsWindow.close();
+                mAchievementsWindow.close();
                 mFrame.dispose();
             }
         });
@@ -48,6 +51,7 @@ public class GameWindow extends Window
         mGame.setSize(Definitions.getMinDimension());
         mGame.setBackground(Color.BLUE);
         mMenuBar.add(mStats);
+        mMenuBar.add(mAchievements);
         mMenuBar.add(mRestart);
         
         mRestart.addActionListener((ActionEvent e) -> { mGame.restart(); });
@@ -55,8 +59,11 @@ public class GameWindow extends Window
             mGame.updateStatsTime();
             mStatsWindow.show();
         });
+        mAchievements.addActionListener((ActionEvent e) -> {
+            mAchievementsWindow.show();
+        });
         mStatsWindow = new StatsWindow("2048 Stats for " + mPlayer, mPlayer.getStats());
-
+        mAchievementsWindow = new AchievementsWindow("2048 Achievements for " + mPlayer, mPlayer.getAchievements());
 
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();

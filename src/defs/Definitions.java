@@ -83,13 +83,15 @@ public abstract class Definitions
 
     public static final String WINDOW_TITLE = "2048 Game";
 
+    public static final int GAME_WIN_NUMBER = 2048;
+
     public static Color getBlockColor(int block)
     {
         return block < BLOCK_COLORS.length ? BLOCK_COLORS[block] : BLOCK_COLORS[BLOCK_COLORS.length - 1]; 
     }
     public static Color getBlockColor(Blocks block)
     {
-        return getBlockColor(block.getValue()); 
+        return getBlockColor(block.getId()); 
     }
     
     /**

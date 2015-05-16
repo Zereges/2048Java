@@ -27,7 +27,6 @@ public class Player implements Serializable
     public Player(String player_name)
     {
         mPlayerName = player_name;
-        mStats = new Stats();
     }
     
     /**
@@ -125,7 +124,8 @@ public class Player implements Serializable
     
     /** Name of the player. */
     private String mPlayerName;
-    private Stats mStats;
+    private Stats mStats = new Stats();
+    private Achievements mAchievements = new Achievements();
     
     public Stats getStats() { return mStats; }
     
@@ -144,4 +144,6 @@ public class Player implements Serializable
         File file = new File(Definitions.SAVES_DIRECTORY, playerName + Definitions.SAVES_EXTENSION);
         file.delete();
     }
+
+    public Achievements getAchievements() { return mAchievements; }
 }
