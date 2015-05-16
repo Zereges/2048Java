@@ -10,28 +10,32 @@ import java.io.Serializable;
 import defs.Definitions;
 
 /**
- * @brief Represents player profile
+ * Represents player profile.
  */
 public class Player implements Serializable
 {
-    /**
-     * Randomly generated serial used for serialization
-     */
+    /** Auto-generated for {@code Serializable} interface. */
     private static final long serialVersionUID = 5442151602381839138L;
+    
+    /** Name of the player. */
+    private String mPlayerName;
+    
+    /** {@link Stats} of the player. */
+    private Stats mStats = new Stats();
+
+    /** {@link Achievements} of the player. */
+    private Achievements mAchievements = new Achievements();
+
     
     /**
      * Constructs new player profile using name.
-     * @param player_name Name for new player.
+     * @param playerName Name for new player.
      */
-    public Player(String player_name)
-    {
-        mPlayerName = player_name;
-    }
+    public Player(String playerName) { mPlayerName = playerName; }
     
     /**
      * Serializes player profile into the file. This will replace a file if it exists.
      * @return True on success, false otherwise.
-     * @throws IOException
      */
     public boolean save()
     {
@@ -55,15 +59,14 @@ public class Player implements Serializable
     
     /**
      * Sets new player name.
-     * @param player_name New player name.
+     * @param playerName New player name.
      */
-    public void setName(String player_name) { mPlayerName = player_name; }
+    public void setName(String playerName) { mPlayerName = playerName; }
     
     /**
-     * Deserializes player profile from the given file.
-     * @param file File to look in for serialized player
+     * Deserializes player profile for requested player name.
+     * @param playerName String representing player name.
      * @return Player class representing found profile in given file. If no profile could be found, returns null.
-     * @throws IOException
      */
     public static Player load(String playerName)
     {
@@ -82,17 +85,12 @@ public class Player implements Serializable
         }        
     }
     
-    /**
-     * Deletes file representing player profile. If deletion fails, nothing happens.
-     */
-    public void delete()
-    {
-        getPlayerFile().delete();
-    }
+    /** Deletes file representing player profile. If deletion fails, nothing happens. */
+    public void delete() { getPlayerFile().delete(); }
 
     /**
      * Converts argument into File class representing serialized player profile.
-     * @param player_name Player name to generate file from.
+     * @param playerName Player name to generate file from.
      * @return File representing abstract path to serialized player profile.
      */
     public static final File getPlayerFile(String playerName)
@@ -104,10 +102,7 @@ public class Player implements Serializable
      * Converts this player into File class representing serialized profile.
      * @return File representing abstract path to serialized player profile.
      */
-    public File getPlayerFile()
-    {
-        return getPlayerFile(mPlayerName);
-    }
+    public File getPlayerFile() { return getPlayerFile(mPlayerName); }
     
     
     /**
@@ -121,28 +116,32 @@ public class Player implements Serializable
         return save();
     }
     
-    /** Name of the player. */
-    private String mPlayerName;
-    private Stats mStats = new Stats();
-    private Achievements mAchievements = new Achievements();
-    
+    /**
+     * Gets {@link Stats} for the player.
+     * @return {@link Stats} of that player.
+     */
     public Stats getStats() { return mStats; }
+
+    /**
+     * Gets {@link Stats} for the player.
+     * @return {@link Stats} of that player.
+     */
+    public Achievements getAchievements() { return mAchievements; }
     
     /**
      * Converts player to string from its name.
      * @return Player name.
      */
     @Override
-    public String toString()
-    {
-        return mPlayerName;
-    }
+    public String toString() { return mPlayerName; }
 
+    /**
+     * Deletes a file containing player profile.
+     * @param playerName Player name for which delete is requested.
+     */
     public static void delete(String playerName)
     {
         File file = new File(Definitions.SAVES_DIRECTORY, playerName + Definitions.SAVES_EXTENSION);
         file.delete();
     }
-
-    public Achievements getAchievements() { return mAchievements; }
 }

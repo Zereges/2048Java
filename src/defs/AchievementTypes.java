@@ -1,5 +1,10 @@
 package defs;
 
+/**
+ * Represents achievements database.
+ * @see main.Achievements
+ * @see windows.AchievementsWindow
+ */
 public enum AchievementTypes
 {
     MAKE_BLOCK_512(0, "Obtain a block with the value of 512."),
@@ -12,13 +17,29 @@ public enum AchievementTypes
     LOSE_IN_1MIN(7, "Lose the game in 1 minute."),
     LOSE_WITH_1028(8, "Lose the game while having Block with the value of 1024.");
     
+    /** ID of the achievement. */
     private final int mId;
-    private final String mName;
-    AchievementTypes(int id, String name) { mId = id; mName = name; }
     
-    @Override
-    public String toString() { return mName; }
+    /** Description of the achievement. */
+    private final String mDesc;
+    
+    /**
+     * Constructor for enum members.
+     * @param id ID of the achievement.
+     * @param desc Description of the achievement.
+     */
+    AchievementTypes(int id, String desc) { mId = id; mDesc = desc; }
 
-    public int getIndex() { return mId; }
-    
+    /**
+     * Converts enum to string.
+     * @return String representation of given achievement.
+     */
+    @Override
+    public String toString() { return mDesc; }
+
+    /**
+     * Gets ID of the achievement.
+     * @return ID of the achievement.
+     */
+    public int getId() { return mId; }
 }

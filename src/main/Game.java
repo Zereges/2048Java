@@ -19,22 +19,52 @@ import defs.Direction;
 import defs.NumberedRect;
 import defs.Rect;
 
+/**
+ * Represents game field.
+ */
 public class Game extends JPanel
 {
+    /** Auto-generated for {@code Serializable} interface. */
     private static final long serialVersionUID = 1L;
     
+    /** Player profile. */
     private Player mPlayer;
+    
+    /** Reference to {@link windows.GameWindow Game Window}. */
     private GameWindow mWindow;
+    
+    /** List of {@link defs.Rect Rects} representing background of the field. */
     private List<Rect> mBackground = new ArrayList<>();
+    
+    /** {@link Definitions#BLOCK_COUNT_X} times {@link Definitions#BLOCK_COUNT_Y} board representing current game state. */
     private NumberedRect[][] mRects = new NumberedRect[Definitions.BLOCK_COUNT_X][Definitions.BLOCK_COUNT_Y];
+    
+    /** List of currently animated {@link defs.Rect Rects}. */
     private List<NumberedRect> mAnimatedRects = new ArrayList<>();
+    
+    /** Animator. */
     private Animator mAnimator = new Animator(this);
+    
+    /** Represents whether player is allowed to perform next turn. */
     private boolean mCanplay = true;
+    
+    /** Random class used for spawning blocks on random position. */
     private Random mRandom = new Random();
+    
+    /** Current game score. */
     private int mScore = 0;
+    
+    /** Indicates whether player managed to win current game. */
     private boolean mWon = false;
+    
+    /** Time, when the game started. */
     private long mStartTime = System.currentTimeMillis();
     
+    /**
+     * Constructs game field.
+     * @param player Player which is playing the game.
+     * @param window Reference to {@link windows.GameWindow} on which Game will be shown.
+     */
     public Game(Player player, GameWindow window)
     {
         super(true); // double buffering.
@@ -68,6 +98,10 @@ public class Game extends JPanel
             randomBlock();    
     }
     
+    /** 
+     * Handler for capturing user keyboard presses.
+     * @param keyCode Keycode refering to key pressed.
+     */
     public void keyPressed(int keyCode)
     {
         switch (keyCode)
@@ -84,17 +118,16 @@ public class Game extends JPanel
             case KeyEvent.VK_DOWN:
                 play(Direction.DOWN);
                 break;
-    
             case KeyEvent.VK_R:
                 restart();
                 break;
-    
-            // TBD
-            case KeyEvent.VK_B:
-                randomBlock();
         }
     }
     
+    /**
+     * Performs one turn in given direction.
+     * @param direction {@link defs.Direction} player choosed to play. 
+     */
     public void play(Direction direction)
     {
         if (!canPlay())
@@ -195,34 +228,12 @@ public class Game extends JPanel
 
         mAnimator.startAnimation();
         if (played)
-        {
             mPlayer.getStats().play(direction);
-        }
+
         onTurnEnd(played);
     }
-    
-    private void onTurnEnd(boolean played)
-    {
-        if (played)
-        {
-            randomBlock();
-        }
         
-        if (isGameOver())
-            gameOver();
-    }
-
-    private void gameOver()
-    {
-        if (mWon)
-            return;
-        mCanplay = false;
-        mPlayer.getStats().lose();
-        mPlayer.getAchievements().lose(mStartTime, this);
-
-        mWindow.showWarning("Game Over!", "Press Restart to play again.");
-    }
-    
+    /** Is called when player makes a winning turn. */
     public void won()
     {
         mWon = true;
@@ -230,80 +241,11 @@ public class Game extends JPanel
         mPlayer.getStats().win();
         
     }
-
-    private void mergeTo(int fromX, int fromY, int toX, int toY)
-    {
-        mAnimatedRects.add(mRects[fromX][fromY]);
-        mAnimator.add(new Merge(mRects[fromX][fromY], mRects[toX][toY], mAnimatedRects));
-        mRects[fromX][fromY] = null;
-        mRects[toX][toY].nextNumber(false);
-
-        int number = 2 * mRects[toX][toY].getShownNumber();
-        addScore(number);
-
-        mPlayer.getStats().merge();
-        mPlayer.getStats().score(number);
-        mPlayer.getStats().highestScore(mScore);
-        mPlayer.getStats().maximalBlock(number);
-
-        mPlayer.getAchievements().merge(number);
-        
-        if (!mWon && number == Definitions.GAME_WIN_NUMBER)
-        {
-            won();
-            mPlayer.getAchievements().won(mStartTime, this);
-        }
-    }
-
-    public boolean canMerge(NumberedRect r1, NumberedRect r2)
-    {
-        return r1 != null && r2 != null && r1.getNumber() == r2.getNumber();
-    }
-
-    private boolean canPlay()
-    {
-        return mAnimator.canPlay() && mCanplay;
-    }
-
-    private void moveTo(int fromX, int fromY, int toX, int toY)
-    {
-        mAnimator.add(new Movement(mRects[fromX][fromY], Rect.getBlockCoords(toX, toY)));
-        mRects[toX][toY] = mRects[fromX][fromY];
-        mRects[fromX][fromY] = null;
-        
-        mPlayer.getStats().move();
-    }
-
-    private boolean spawnBlock(int block, int x, int y)
-    {
-        if (mRects[x][y] != null)
-            return false;
-        mRects[x][y] = new NumberedRect(Rect.getBlockCoords(x, y), block, 0, 0, 0);
-        mAnimator.addAndStart(new Spawn(mRects[x][y], Rect.getBlockCoords(x, y)));
-        return true;
-    }
     
-    @SuppressWarnings("unused")
-    private boolean spawnBlock(Blocks block, int x, int y) { return spawnBlock(block.getId(), x, y); }
-
-    private boolean randomBlock(int block)
-    {
-        List<Integer> poss = new ArrayList<>();
-        for (int i = 0; i < Definitions.BLOCK_COUNT_X * Definitions.BLOCK_COUNT_Y; ++i)
-            if (mRects[i / Definitions.BLOCK_COUNT_X][i % Definitions.BLOCK_COUNT_Y] == null)
-                poss.add(i);
-        if (poss.size() == 0)
-            return false;
-
-        int pos = poss.get(mRandom.nextInt(poss.size()));
-        return spawnBlock(block, pos / Definitions.BLOCK_COUNT_X, pos % Definitions.BLOCK_COUNT_Y);
-    }
-    private boolean randomBlock(Blocks block) { return randomBlock(block.getId()); }
-    private boolean randomBlock()
-    {
-        return randomBlock(mRandom.nextInt(100) < Definitions.BLOCK_4_SPAWN_CHANCE ? Blocks.BLOCK_4 : Blocks.BLOCK_2);
-    }
-    
+    /**
+     * Removes {@link defs.NumberedRect} from the game field.
+     * @param rect {@link defs.NumberedRect} to remove from the game field.
+     */
     public void removeBlock(NumberedRect rect)
     {
         for (int x = 0; x < Definitions.BLOCK_COUNT_X; ++x)
@@ -315,6 +257,10 @@ public class Game extends JPanel
                 }
     }
     
+    /**
+     * Restarts current game. This preserves current stats.
+     * @see Stats
+     */
     public void restart()
     {
         mAnimator.clear();
@@ -330,35 +276,21 @@ public class Game extends JPanel
         mWindow.getScoreLabel().setWon(false);
         mPlayer.getStats().restart();
     }
-    
-    @Override
-    public void paintComponent(Graphics graphics)
-    {
-        drawBackground(graphics);
-        drawRects(graphics);
-    }
-    
-    private void drawBackground(Graphics graphics)
-    {
-        for (Rect r : mBackground)
-            r.draw(graphics);
-    }
-    private void drawRects(Graphics graphics)
-    {
-        for (NumberedRect[] rects : mRects)
-            for (NumberedRect rect : rects)
-                if (rect != null)
-                    rect.draw(graphics);
-        for (NumberedRect rect : mAnimatedRects)
-            rect.draw(graphics);
-    }
 
+    /**
+     * Incremens the score based on merged blocks.
+     * @param number Score to add to current score.
+     */
     public void addScore(int number)
     {
         mScore += number;
         mWindow.getScoreLabel().addScore(number);
     }
     
+    /**
+     * Checks whether game over has happened.
+     * @return True if game is in game over state, false otherwise.
+     */
     public boolean isGameOver()
     {
         for (int x = 0; x < Definitions.BLOCK_COUNT_X; ++x)
@@ -385,15 +317,26 @@ public class Game extends JPanel
         return true;
     }
     
-    public void updateStatsTime()
-    {
-        mPlayer.getStats().updateTime(mStartTime);
-    }
+    /**
+     * Updates time statistics in {@code mStats}.
+     * @see Stats
+     */
+    public void updateStatsTime() { mPlayer.getStats().updateTime(mStartTime); }
 
-    public boolean hasBlock(Blocks block)
-    {
-        return hasBlock(block.getId());
-    }
+    /**
+     * Checks whether given block is in the game field.
+     * @param block {@link defs.Blocks Block} to look for.
+     * @return True if given block was found, false otherwise.
+     * @see #hasBlock(int)
+     */
+    public boolean hasBlock(Blocks block) { return hasBlock(block.getId()); }
+    
+    /**
+     * Checks whether given block is in the game field.
+     * @param block Value representing {@link defs.NumberedRect}.
+     * @return True if given block was found, false otherwise.
+     * @see #hasBlock(Blocks)
+     */
     public boolean hasBlock(int block)
     {
         for (int x = 0; x < Definitions.BLOCK_COUNT_X; ++x)
@@ -401,5 +344,214 @@ public class Game extends JPanel
                 if (mRects[x][y].getNumber() == block)
                     return true;
         return false;
+    }
+    
+    /**
+     * Is called when {@link Animator} invalidates this component.
+     * @param graphics {@code Graphics} context.
+     * @see Animator
+     */
+    @Override
+    public void paintComponent(Graphics graphics)
+    {
+        drawBackground(graphics);
+        drawRects(graphics);
+    }
+    
+    /**
+     * Is called after {@link #play(Direction)}.
+     * @param played {@link Direction} the player choosed to play.
+     */
+    private void onTurnEnd(boolean played)
+    {
+        if (played)
+        {
+            randomBlock();
+        }
+        
+        if (isGameOver())
+            gameOver();
+    }
+
+    /** Is called when player makes a turn, which led to losing the game. */
+    private void gameOver()
+    {
+        if (mWon)
+            return;
+        mCanplay = false;
+        mPlayer.getStats().lose();
+        mPlayer.getAchievements().lose(mStartTime, this);
+
+        mWindow.showWarning("Game Over!", "Press Restart to play again.");
+    }
+
+    /**
+     * Performs merging action of objects on the game field.
+     * This also informs {@code mStats} of the call.
+     * This also informs {@code mAchievements} of the call.
+     * This also adds merging animation for {@link Animator} class.
+     * @param fromX Game X coord of merging source.
+     * @param fromY Game Y coord of merging source.
+     * @param toX Game X coord of merging target.
+     * @param toY Game Y coord of merging target.
+     */
+    private void mergeTo(int fromX, int fromY, int toX, int toY)
+    {
+        mAnimatedRects.add(mRects[fromX][fromY]);
+        mAnimator.add(new Merge(mRects[fromX][fromY], mRects[toX][toY], mAnimatedRects));
+        mRects[fromX][fromY] = null;
+        mRects[toX][toY].nextNumber(false);
+
+        int number = 2 * mRects[toX][toY].getShownNumber();
+        addScore(number);
+
+        mPlayer.getStats().merge();
+        mPlayer.getStats().score(number);
+        mPlayer.getStats().highestScore(mScore);
+        mPlayer.getStats().maximalBlock(number);
+
+        mPlayer.getAchievements().merge(number);
+        
+        if (!mWon && number == Definitions.GAME_WIN_NUMBER)
+        {
+            won();
+            mPlayer.getAchievements().won(mStartTime, this);
+        }
+    }
+
+    /**
+     * Checks whether two {@link NumberedRect NumberedRects} can be merged together.
+     * @param r1 First {@link NumberedRect}.
+     * @param r2 Second {@link NumberedRect}.
+     * @return True if can be merged, false otherwise.
+     */
+    private boolean canMerge(NumberedRect r1, NumberedRect r2)
+    {
+        return r1 != null && r2 != null && r1.getNumber() == r2.getNumber();
+    }
+
+    /**
+     * Checks whether player may perform a turn.
+     * @return True if can, false otherwise.
+     */
+    private boolean canPlay() { return mAnimator.hasFinished() && mCanplay; }
+
+    /**
+     * Performs moving action of objects on the game field.
+     * This also informs {@code mStats} of the call.
+     * This also adds moving animation for {@link Animator} class.
+     * @param fromX Game X coord of moving source.
+     * @param fromY Game Y coord of moving source.
+     * @param toX Game X coord of moving target.
+     * @param toY Game Y coord of moving target.
+     */
+    private void moveTo(int fromX, int fromY, int toX, int toY)
+    {
+        mAnimator.add(new Movement(mRects[fromX][fromY], Rect.getBlockCoords(toX, toY)));
+        mRects[toX][toY] = mRects[fromX][fromY];
+        mRects[fromX][fromY] = null;
+        
+        mPlayer.getStats().move();
+    }
+
+    /**
+     * Spawns given block on given coords on the field and returns success state.
+     * Spawn may be unsuccessful when target coord is not empty.
+     * This also adds spawning animation for {@link Animator} class.
+     * @param block Value representing the block to spawn.
+     * @param x Game X coord to spawn the block on.
+     * @param y Game Y coord to spawn the block on.
+     * @return True if spawn was successful, false otherwise.
+     * @see #spawnBlock(Blocks, int, int)
+     */
+    private boolean spawnBlock(int block, int x, int y)
+    {
+        if (mRects[x][y] != null)
+            return false;
+        mRects[x][y] = new NumberedRect(Rect.getBlockCoords(x, y), block, 0, 0, 0);
+        mAnimator.addAndStart(new Spawn(mRects[x][y], Rect.getBlockCoords(x, y)));
+        return true;
+    }
+    
+    /**
+     * Spawns given block on given coords on the field and returns success state.
+     * Spawn may be unsuccessful when target coord is not empty.
+     * This also adds spawning animation for {@link Animator} class.
+     * @param block {@link defs.Blocks Block} to spawn on given coords.
+     * @param x Game X coord to spawn the block on.
+     * @param y Game Y coord to spawn the block on.
+     * @return True if spawn was successful, false otherwise.
+     * @see #spawnBlock(int, int, int)
+     */
+    @SuppressWarnings("unused")
+    private boolean spawnBlock(Blocks block, int x, int y) { return spawnBlock(block.getId(), x, y); }
+
+    /**
+     * Spawns given block on random coords returns success state.
+     * Spawn may be unsuccessful if the game field is full.
+     * This also adds spawning animation for {@link Animator} class.
+     * @param block Value representing the block to spawn.
+     * @return True if spawn was successful, false otherwise.
+     * @see #randomBlock(Blocks)
+     * @see #randomBlock()
+     */
+    private boolean randomBlock(int block)
+    {
+        List<Integer> poss = new ArrayList<>();
+        for (int i = 0; i < Definitions.BLOCK_COUNT_X * Definitions.BLOCK_COUNT_Y; ++i)
+            if (mRects[i / Definitions.BLOCK_COUNT_X][i % Definitions.BLOCK_COUNT_Y] == null)
+                poss.add(i);
+        if (poss.size() == 0)
+            return false;
+
+        int pos = poss.get(mRandom.nextInt(poss.size()));
+        return spawnBlock(block, pos / Definitions.BLOCK_COUNT_X, pos % Definitions.BLOCK_COUNT_Y);
+    }
+    
+    /**
+     * Spawns given block on random coords returns success state.
+     * Spawn may be unsuccessful if the game field is full.
+     * This also adds spawning animation for {@link Animator} class.
+     * @param block {@link defs.Blocks Block} to spawn.
+     * @return True if spawn was successful, false otherwise.
+     * @see #randomBlock(Blocks)
+     * @see #randomBlock()
+     */
+    private boolean randomBlock(Blocks block) { return randomBlock(block.getId()); }
+    
+    /**
+     * Spawns {@link defs.Blocks#BLOCK_2} (with {@link defs.Definitions#BLOCK_4_SPAWN_CHANCE} {@link defs.Blocks#BLOCK_4}
+     * on the random coords on the game field and returns success state. 
+     * Spawn may be unsuccessful if the game field is full.
+     * This also adds spawning animation for {@link Animator} class.
+     * @return True if spawn was successful, false otherwise.
+     */
+    private boolean randomBlock()
+    {
+        return randomBlock(mRandom.nextInt(100) < Definitions.BLOCK_4_SPAWN_CHANCE ? Blocks.BLOCK_4 : Blocks.BLOCK_2);
+    }
+
+    /**
+     * Draws background of the game field.
+     * @param graphics {@code Graphics} context.
+     */
+    private void drawBackground(Graphics graphics)
+    {
+        for (Rect r : mBackground)
+            r.draw(graphics);
+    }
+    
+    /**
+     * Draws {@link defs.NumberedRect NumberedRects} on the game field.
+     * @param graphics {@code Graphics} context.
+     */
+    private void drawRects(Graphics graphics)
+    {
+        for (NumberedRect[] rects : mRects)
+            for (NumberedRect rect : rects)
+                if (rect != null)
+                    rect.draw(graphics);
+        for (NumberedRect rect : mAnimatedRects)
+            rect.draw(graphics);
     }
 }

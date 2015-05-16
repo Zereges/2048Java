@@ -3,19 +3,21 @@ package windows.components;
 import javax.swing.JLabel;
 
 /**
- * @brief Label used for displaying score in current game.
- * 
+ * Modified {@code JLabel} used for displaying score in current game.
  */
-public class ScoreLabel extends JLabel {
+public class ScoreLabel extends JLabel
+{
+    /** Auto-generated for {@code Serializable} interface. */
     private static final long serialVersionUID = 1L;
-
-    /**
-     * Default constructor of ScoreLabel.
-     */
-    public ScoreLabel()
-    {
-        setText("Score: " + mScore);
-    }
+    
+    /** Current player's score. */
+    private int mScore = 0;
+    
+    /** Indicates, whether player won this game. */
+    private boolean mWon = false;
+    
+    /** Default constructor of ScoreLabel. */
+    public ScoreLabel() { setText("Score: " + mScore); }
     
     /**
      * Sets current score to given value.
@@ -41,11 +43,6 @@ public class ScoreLabel extends JLabel {
      */
     public void setWon(boolean won) { mWon = won; } 
     
+    /** Updates content of the label. */
     private void updateScore() { setText("Score: " + mScore + (mWon ? " (Won)" : "")); }
-    
-    /** Current player's score. */
-    private int mScore = 0;
-    
-    /** Indicates, whether player won this game. */
-    private boolean mWon = false;
 }

@@ -1,5 +1,9 @@
 package defs;
 
+/**
+ * Enum for easier referencing specific blocks by name.
+ * @see NumberedRect
+ */
 public enum Blocks
 {
     BLOCK_0(0, 0),
@@ -21,10 +25,28 @@ public enum Blocks
     BLOCK_65536(16, 65536),
     BLOCK_131072(17, 131072); // Theoretical maximum on 4x4 board.
     
+    /** ID of the block. */
     private final int mId;
+    
+    /** Real value of the block. */
     private final int mValue;
     
+    /**
+     * Constructor for enum members.
+     * @param id ID of the block.
+     * @param value Real value of the block.
+     */
     Blocks(int id, int value) { mId = id; mValue = value; }
+    
+    /**
+     * Gets ID of the block.
+     * @return ID of the block.
+     */
     public final int getId() { return mId; }
+    
+    /**
+     * Gets value of the block.
+     * @return Real shown value of the block.
+     */
     public final int getValue() { return mValue; }
 }

@@ -1,5 +1,10 @@
 package defs;
 
+/**
+ * Represents achievements database.
+ * @see main.Stats
+ * @see windows.StatsWindow
+ */
 public enum StatTypes
 {
     LEFT_MOVES(0, "Left moves"),
@@ -17,12 +22,29 @@ public enum StatTypes
     HIGHEST_SCORE(12, "Highest score obtained"),
     MAXIMAL_BLOCK(13, "Maximal block");
     
+    /** ID of the stat. */
     private final int mId;
+    
+    /** Description of the stat. */
     private final String mDesc;
+    
+    /**
+     * Constructor for enum members.
+     * @param id ID of the achievement.
+     * @param desc Description of the achievement.
+     */    
     StatTypes(int id, String desc) { mId = id; mDesc = desc; }
     
+    /**
+     * Converts enum to string.
+     * @return String representation of given stat.
+     */
     @Override
     public String toString() { return mDesc; }
 
-    public int getIndex() { return mId; }
+    /**
+     * Gets ID of the stat.
+     * @return ID of the stat.
+     */
+    public int getId() { return mId; }
 }

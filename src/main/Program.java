@@ -4,13 +4,13 @@ import defs.UnrecoverableException;
 import windows.PlayerPickerWindow;
 
 /**
- * @author Filip Kliber (Zereges<at>gmail.com)
- * @brief Main application entry point.
+ * Main application entry point.
+ * @author Filip Kliber (Zereges(at)gmail.com)
  */
 public class Program
 {
     /**
-     * @param args Command line arguments
+     * @param args Command line arguments.
      */
     public static void main(String[] args)
     {

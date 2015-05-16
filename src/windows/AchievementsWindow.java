@@ -7,14 +7,27 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import main.Achievements;
 import defs.AchievementTypes;
+import defs.Definitions;
 
+/**
+ * Window used for showing {@link main.Achievements}.
+ * @see Window
+ */
 public class AchievementsWindow extends Window
 {
+    /** {@code JTable} of achievements. */
     private JTable mAchievementsTable = new JTable(AchievementTypes.values().length, 1);
+    
+    /** Reference to {@link main.Achievements}. */
     private Achievements mAchievements;
-    public AchievementsWindow(String title, Achievements achievements)
+    
+    /**
+     * Constructs {@code AchievementsWindow}.
+     * @param achievements Reference to {@link main.Achievements} to show.
+     */
+    public AchievementsWindow(Achievements achievements)
     {
-        super(title);
+        super(Definitions.WINDOW_TITLE + " - Achievements");
         mAchievements = achievements;
         
         mAchievementsTable.setEnabled(false);
@@ -35,15 +48,20 @@ public class AchievementsWindow extends Window
         mFrame.pack();
     }
     
+    /** Updates contents of {@code mAchievementsTable} to reflect current achievements. */
     private void updateAchievements()
     {
         mAchievementsTable.removeAll();
         for (AchievementTypes achievement : AchievementTypes.values())
         {
-            mAchievementsTable.getModel().setValueAt(achievement, achievement.getIndex(), 0);
+            mAchievementsTable.getModel().setValueAt(achievement, achievement.getId(), 0);
         }
     }
     
+    /**
+     * Shows a window.
+     * @see Window#show()
+     */
     @Override
     public void show()
     {

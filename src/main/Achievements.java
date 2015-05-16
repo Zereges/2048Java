@@ -7,13 +7,31 @@ import java.util.concurrent.TimeUnit;
 import defs.AchievementTypes;
 import defs.Blocks;
 
+/**
+ * Represents saved Achievements for current player.
+ * @see defs.AchievementTypes
+ * @see Player
+ */
 public class Achievements implements Serializable
 {
+    /** Auto-generated for {@code Serializable} interface. */
     private static final long serialVersionUID = -5874188051861561906L;
+    
+    /** Already completed achievements. */
     private SortedSet<AchievementTypes> mCompleted = new TreeSet<>();
     
+    /**
+     * Sets given achievement as completed.
+     * @param achievement Achievement to set as completed.
+     * @see #setCompleted(AchievementTypes, boolean)
+     */
     public void setCompleted(AchievementTypes achievement) { setCompleted(achievement, true); }
     
+    /**
+     * Sets completation of given achievement based on the argument of the method.
+     * @param achievement Achievement to change completion of.
+     * @param completed True if achievement is set as completed, false if achievement is set as incomplete.
+     */
     public void setCompleted(AchievementTypes achievement, boolean completed)
     {
         if (completed)
@@ -22,11 +40,17 @@ public class Achievements implements Serializable
             mCompleted.remove(achievement);
     }
     
-    public boolean isCompleted(AchievementTypes achievement)
-    {
-        return mCompleted.contains(achievement);
-    }
+    /**
+     * Checks whether given achievement is already completed or not
+     * @param achievement Achievement to check for.
+     * @return True if achievement has been already completed, false otherwise.
+     */
+    public boolean isCompleted(AchievementTypes achievement) { return mCompleted.contains(achievement); }
 
+    /**
+     * Is fired when two {@link defs.NumberedRect} are merged into one.
+     * @param number Real shown number of new block being merged.
+     */
     public void merge(int number)
     {
         if (number == Blocks.BLOCK_512.getValue())
@@ -39,6 +63,11 @@ public class Achievements implements Serializable
             setCompleted(AchievementTypes.MAKE_BLOCK_4096);
     }
     
+    /**
+     * Is fired when {@link main.Player} wins the game.
+     * @param startTime Time in milliseconds when the game was started.
+     * @param game Reference to {@link main.Game}.
+     */
     public void won(long startTime, Game game)
     {
         long now = System.currentTimeMillis();
@@ -47,7 +76,12 @@ public class Achievements implements Serializable
         if (now - startTime < TimeUnit.MINUTES.toMillis(10))
             setCompleted(AchievementTypes.WIN_IN_10MIN);
     }
-    
+
+    /**
+     * Is fired when {@link main.Player} loses the game.
+     * @param startTime Time in milliseconds when the game was started.
+     * @param game Reference to {@link main.Game}.
+     */
     public void lose(long startTime, Game game)
     {
         long now = System.currentTimeMillis();

@@ -13,16 +13,37 @@ import windows.components.ScoreLabel;
 import main.Game;
 import main.Player;
 
+/**
+ * Represents base game window.
+ * @see Window
+ */
 public class GameWindow extends Window
 {
+    /** Reference to {@link main.Game} being played. */
     private Game mGame;
+    
+    /** Reference to {@link main.Player} playing the game. */
     private Player mPlayer;
+    
+    /** {@link windows.components.ScoreLabel} for showing current score. */
     private ScoreLabel mScore = new ScoreLabel();
+    
+    /** {@code JMenuBar}. */
     private JMenuBar mMenuBar = new JMenuBar();
+
+    /** Show Statistics {@code JButton}. */
     private JButton mStats = new JButton("Show Statistics");
+    
+    /** Show Achievements {@code JButton}. */
     private JButton mAchievements = new JButton("Show Achievements");
+    
+    /** Restart {@code JButton}. */
     private JButton mRestart = new JButton("Restart");
+    
+    /** {@link StatsWindow} which is shown after {@link mStats} click. */
     private StatsWindow mStatsWindow;
+
+    /** {@link AchievementsWindow} which is shown after {@link mAchievements} click. */
     private AchievementsWindow mAchievementsWindow;
 
     /**
@@ -60,8 +81,8 @@ public class GameWindow extends Window
         mAchievements.addActionListener((ActionEvent e) -> {
             mAchievementsWindow.show();
         });
-        mStatsWindow = new StatsWindow("2048 Stats for " + mPlayer, mPlayer.getStats());
-        mAchievementsWindow = new AchievementsWindow("2048 Achievements for " + mPlayer, mPlayer.getAchievements());
+        mStatsWindow = new StatsWindow(mPlayer.getStats());
+        mAchievementsWindow = new AchievementsWindow(mPlayer.getAchievements());
 
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
@@ -81,5 +102,9 @@ public class GameWindow extends Window
         mFrame.pack();
     }
     
+    /**
+     * Getter for {@link windows.components.ScoreLabel}.
+     * @return {@link windows.components.ScoreLabel} for showing score.
+     */
     public ScoreLabel getScoreLabel() { return mScore; }
 }

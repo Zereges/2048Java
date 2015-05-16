@@ -6,14 +6,21 @@ import java.awt.event.FocusListener;
 import javax.swing.JTextField;
 
 /**
- * @brief Modified JTextField to allow user friendly both input and output. 
- *
+ * Modified {@code JTextField} to allow user friendly both input and output.
+ * @see windows.PlayerPickerWindow
  */
 public class FancyTextField extends JTextField
 {
+    /** Auto-generated for {@code Serializable} interface. */
     private static final long serialVersionUID = 1L;
+    
+    /** Indicates whether text in text field is valid or not. */
     private boolean mValid;
+    
+    /** Default text color. */
     private Color mDefaultColor;
+    
+    /** Default text in text field. */
     private String mDefaultText;
     
     /**
@@ -64,6 +71,10 @@ public class FancyTextField extends JTextField
      */
     public boolean isValid() { return mValid; }
     
+    /**
+     * Sets validity of the text in the text field.
+     * @param valid Indicates whether text is set as valid or not.
+     */
     private void setValid(boolean valid)
     {
         setForeground(valid ? mDefaultColor : Color.LIGHT_GRAY);

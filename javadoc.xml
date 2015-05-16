@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="private" author="false" classpath="." destdir="doc" doctitle="2048 Game" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="main,windows.components,windows,defs,anims" source="1.8" sourcepath="src" splitindex="true" use="true" version="true"/>
+    </target>
+</project>

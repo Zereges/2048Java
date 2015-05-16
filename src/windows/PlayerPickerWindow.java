@@ -14,16 +14,33 @@ import defs.UnrecoverableException;
 import defs.UnrecoverableType;
 
 /**
- * @brief Represents window used for picking player profile.
+ * Represents window used for picking player profile.
+ * @see Window
  */
 public class PlayerPickerWindow extends Window
 {
+    /** Informative {@code JLabel}. */
     private JLabel mInfoLabel = new JLabel("Select a profile to load. Profiles are saved in " + Definitions.SAVES_DIRECTORY + " folder.");
+    
+    /** {@code JComboBox} to list player profiles. */
     private JComboBox<String> mPlayerProfiles = new JComboBox<>();
+    
+    /** {@link windows.components.FancyTextField} for new player profile. */
     private FancyTextField mNewProfileName = new FancyTextField("Type in desired name", false);
+    
+    /** New player profile {@code JButton}. */
     private JButton mNewProfile = new JButton("Create new profile");
+
+    /** Delete player profile {@code JButton}. */
     private JButton mDeleteProfile = new JButton("Delete profile");
+
+    /** Start the Game {@code JButton}. */
     private JButton mStartGame = new JButton("Load profile & Start game");
+    
+    /**
+     * Constructs {@code PlayerPickerWindow}.
+     * @throws UnrecoverableException When saves directory could not be created.
+     */
     public PlayerPickerWindow() throws UnrecoverableException
     {
         super(Definitions.WINDOW_TITLE, false);
@@ -104,12 +121,16 @@ public class PlayerPickerWindow extends Window
         mFrame.pack();
     }
 
+    /**
+     * Lists player profiles from {@link defs.Definitions#SAVES_DIRECTORY} to {@link mPlayerProfiles}.
+     * @throws UnrecoverableException When saves directory could not be created.
+     */
     private void listPlayerProfiles() throws UnrecoverableException
     {
         File statsDir = new File(Definitions.SAVES_DIRECTORY);
         if (!statsDir.isDirectory())
             if (!statsDir.mkdir())
-                throw new UnrecoverableException(UnrecoverableType.CANNOT_CREATE_STATS_DIR);
+                throw new UnrecoverableException(UnrecoverableType.CANNOT_CREATE_SAVES_DIR);
         File[] files = statsDir.listFiles((File dir, String name) -> { return name.endsWith(Definitions.SAVES_EXTENSION); });
         
         if (files.length == 0)
@@ -125,6 +146,7 @@ public class PlayerPickerWindow extends Window
         }
     }
     
+    /** Is called when no profiles could be found. */
     private void noProfiles()
     {
         if (mPlayerProfiles.getItemCount() == 0)
