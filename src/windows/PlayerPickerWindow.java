@@ -4,12 +4,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+
+import main.Player;
 import windows.components.FancyTextField;
 import defs.Definitions;
-import defs.Player;
 import defs.UnrecoverableException;
 import defs.UnrecoverableType;
 

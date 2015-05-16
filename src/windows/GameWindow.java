@@ -11,9 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JMenuBar;
 
 import defs.Definitions;
-import defs.Player;
 import windows.components.ScoreLabel;
 import main.Game;
+import main.Player;
 
 public class GameWindow extends Window
 {

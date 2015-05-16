@@ -1,4 +1,4 @@
-package defs;
+package main;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import main.Stats;
+import defs.Definitions;
 
 /**
  * @brief Represents player profile

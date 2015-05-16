@@ -8,7 +8,9 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import javax.swing.JPanel;
+
 import anims.Merge;
 import anims.Movement;
 import anims.Spawn;
@@ -17,7 +19,6 @@ import defs.Blocks;
 import defs.Definitions;
 import defs.Direction;
 import defs.NumberedRect;
-import defs.Player;
 import defs.Rect;
 
 public class Game extends JPanel
