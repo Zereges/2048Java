@@ -3,8 +3,6 @@ package windows;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.table.TableColumn;
-
 import defs.StatTypes;
 import main.Stats;
 

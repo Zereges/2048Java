@@ -2,11 +2,9 @@ package windows;
 
 import java.awt.Color;
 import java.awt.Component;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-
 import main.Achievements;
 import defs.AchievementTypes;
 

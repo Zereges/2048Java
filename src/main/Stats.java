@@ -1,7 +1,6 @@
 package main;
 
 import java.io.Serializable;
-
 import defs.Direction;
 import defs.StatTypes;
 

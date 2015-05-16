@@ -8,9 +8,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import javax.swing.JPanel;
-
 import anims.Merge;
 import anims.Movement;
 import anims.Spawn;
@@ -36,22 +34,20 @@ public class Game extends JPanel
     private int mScore = 0;
     private boolean mWon = false;
     private long mStartTime = System.currentTimeMillis();
-
-    private class MyDispatcher implements KeyEventDispatcher
-    {
-        @Override
-        public boolean dispatchKeyEvent(KeyEvent e)
-        {
-            if (e.getID() == KeyEvent.KEY_PRESSED)
-                keyPressed(e.getKeyCode());
-            return false;
-        }
-    }
     
     public Game(Player player, GameWindow window)
     {
         super(true); // double buffering.
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new MyDispatcher());
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher()
+        {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent e)
+            {
+                if (e.getID() == KeyEvent.KEY_PRESSED)
+                    keyPressed(e.getKeyCode());
+                return false;
+            }            
+        });
         mPlayer = player;
         mWindow = window;
         
@@ -237,10 +233,11 @@ public class Game extends JPanel
 
     private void mergeTo(int fromX, int fromY, int toX, int toY)
     {
-        mAnimator.add(new Merge(mRects[fromX][fromY], mRects[toX][toY], mAnimatedRects));
         mAnimatedRects.add(mRects[fromX][fromY]);
+        mAnimator.add(new Merge(mRects[fromX][fromY], mRects[toX][toY], mAnimatedRects));
         mRects[fromX][fromY] = null;
         mRects[toX][toY].nextNumber(false);
+
         int number = 2 * mRects[toX][toY].getShownNumber();
         addScore(number);
 

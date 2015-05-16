@@ -42,7 +42,7 @@ public class Animator
     public boolean canPlay() { return mAnimations.size() == 0; }
     public void startAnimation()
     {
-        Thread t2 = new Thread()
+        Thread thread = new Thread()
         {
             @Override
             public void run()
@@ -70,7 +70,7 @@ public class Animator
                 lock.unlock();
             }
         };
-        t2.start();
+        thread.start();
     }
 
     public boolean hasFinished()

@@ -1,7 +1,6 @@
 package anims;
 
 import java.awt.Point;
-
 import defs.NumberedRect;
 
 public abstract class Animation
