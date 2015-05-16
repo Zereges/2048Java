@@ -3,11 +3,9 @@ package windows;
 import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 
 import main.Achievements;
 import defs.AchievementTypes;
@@ -20,7 +18,9 @@ public class AchievementsWindow extends Window
     {
         super(title);
         mAchievements = achievements;
-
+        
+        mAchievementsTable.setEnabled(false);
+        mAchievementsTable.getColumnModel().getColumn(0).setHeaderValue("Achievement");
         mAchievementsTable.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
         {
             private static final long serialVersionUID = 1L;
@@ -33,7 +33,7 @@ public class AchievementsWindow extends Window
                 return component;
             }
         });
-        mFrame.getContentPane().add(mAchievementsTable);
+        mFrame.getContentPane().add(new JScrollPane(mAchievementsTable));
         mFrame.pack();
     }
     

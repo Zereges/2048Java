@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 import defs.AchievementTypes;
 import defs.Blocks;
-import defs.NumberedRect;
 
 public class Achievements implements Serializable
 {

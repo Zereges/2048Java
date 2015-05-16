@@ -1,26 +1,33 @@
 package windows;
 
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
+
 import defs.StatTypes;
 import main.Stats;
 
 public class StatsWindow extends Window
 {
     private Stats mStats;
-    private JTable mCurrentStatsTable = new JTable(StatTypes.values().length, 2);;
-    private JTable mGlobalStatsTable = new JTable(StatTypes.values().length, 2);;
+    private JTable mCurrentStatsTable = new JTable(StatTypes.values().length, 2);
+    private JTable mGlobalStatsTable = new JTable(StatTypes.values().length, 2);
     private JTabbedPane mTabbedPane = new JTabbedPane(JTabbedPane.TOP);
     
     public StatsWindow(String title, Stats stats)
     {
         super(title);
         mStats = stats;
-
+        
         mCurrentStatsTable.setEnabled(false);
+        mCurrentStatsTable.getColumnModel().getColumn(0).setHeaderValue("Statistics");
+        mCurrentStatsTable.getColumnModel().getColumn(1).setHeaderValue("Value");
         mGlobalStatsTable.setEnabled(false);
-        mTabbedPane.add("Current Stats", mCurrentStatsTable);
-        mTabbedPane.add("Global Stats", mGlobalStatsTable);
+        mGlobalStatsTable.getColumnModel().getColumn(0).setHeaderValue("Statistics");
+        mGlobalStatsTable.getColumnModel().getColumn(1).setHeaderValue("Value");
+        mTabbedPane.add("Current Stats", new JScrollPane(mCurrentStatsTable));
+        mTabbedPane.add("Global Stats", new JScrollPane(mGlobalStatsTable));
         mFrame.getContentPane().add(mTabbedPane);
         mFrame.pack();
     }
