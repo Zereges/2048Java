@@ -32,7 +32,9 @@ The program does not need to be installed at all.
 
 ##Build
 Program can be builded by running ant from root directory  
-`ant` and `ant build-jar`
+`ant`  
+`ant build-jar`  
+Using ant, you can generate javadoc for this project, use `ant javadoc`
 
 ##Program Start
 Program can be started by executing *2048.jar* directly, or using ant

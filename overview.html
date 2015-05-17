@@ -1,0 +1,76 @@
+<body>
+<h1 id="game-2048">Game 2048</h1>
+<h2 id="introduction">Introduction</h2>
+<p>2048 is a logic game played usually on 4x4 board. The board contains
+blocks of various values. In each turn, the player choses the direction
+(up, down, left, right) in which all blocks on the board will move.
+During the turn, a collision of two blocks can happen. If they are
+of same value, they will be merged together to form single block
+of doubled value. After the turn, a random spot on the board is chosen
+and a new block with value of 2 (rarely 4) will spawn on that spot.
+At the beginning, there are two blocks of values 2 (rarely 4).
+The player is winner if he manages to combine blocks into a block with the
+value of 2048. If there is no direction, in which there would be a movement
+of at least one block, then the player is declared as a loser.</p>
+<p>This is its implementation in Java.</p>
+<h2 id="supported-platforms">Supported Platforms</h2>
+<p>This program can be run on any platform, which supports <strong>Java 1.8</strong> with
+at least <strong>Java 1.8</strong> installed.</p>
+<h2 id="download">Download</h2>
+<p>You can download source code directly as release or you can clone
+the repository by yourself and build it using included ant buildfile.
+JavaDoc generated documentation can be accessed online by clicking
+<a href="http://www.zereges.cz/2048Java/doc/">this</a> link </p>
+<p>You can download binaries, containing everything required to run the program
+from <a href="http://www.zereges.cz/2048Java/2048.zip">this</a> mirror.</p>
+<h2 id="installation">Installation</h2>
+<p>The program does not need to be installed at all.</p>
+<h2 id="build">Build</h2>
+<p>Program can be builded by running ant from root directory<br><code>ant</code><br><code>ant build-jar</code><br>Using ant, you can generate javadoc for this project, use <code>ant javadoc</code></p>
+<h2 id="program-start">Program Start</h2>
+<p>Program can be started by executing <em>2048.jar</em> directly, or using ant
+(<code>ant run-jar</code>).</p>
+<h2 id="controls">Controls</h2>
+<h3 id="player-profile-window">Player Profile Window</h3>
+<p>After the program starts, a window for choosing player profile will appear.
+Using selection box, you can choose from existing profiles or you can create a
+new one by typing desired name into the field and then clicking
+<em>Create new profile</em> button. If you wish to delete all the contents of currently
+selected player profile click on the <em>Delete profile button</em> a confirmation
+window will pop up, warning you, that this is the last chance to cancel deletion
+of the profile. After the deletion proceeds, the profile can not be restored.
+After the player clicks <em>Load profile &amp; Start game</em> button, the currently
+selected profile will load and the game will start.</p>
+<h3 id="game-window">Game Window</h3>
+<p>Once the game loads a new window will appear, reflecting current situation on
+the game field. In the top left corner, there is a score label showing player&#39;s
+current score in the game. If player manages to win the game a <em>(Won)</em> will
+appear next to the score points, indicating, that player is now playing for
+higher score or he wants to obtain some achievements. Once player wins the game,
+he can not lose due to lack of next move. If player loses the game before having
+<strong>2048</strong> block, a message informing him about such situation will appear, and
+the player is forced to restart the game.</p>
+<p>In menu bar, there are three buttons, <em>Show Statistics</em> will open statistics
+window, <em>Show Achievements</em> will bring up achievements window and finally
+<em>Restart</em> button restarts current game progress. Current statistics, however,
+will be preserved.</p>
+<p>Player controls the game using the keyboard. <em>Arrow keys</em> performs a turn in
+selected direction (Left arrow will perform left move and so on). Player may
+restart the game using <em>R</em> button, which has the same functionality as <em>Restart</em>
+button in the menu.</p>
+<h3 id="statistics-window">Statistics Window</h3>
+<p>In statistics window, player can look through various statistics collected
+during his playthrough. In <em>Current Stats</em> tab, there are statistics regarding
+current gaming session. In <em>Global Stats</em> tab, player can find statistics
+collecting for the life of the profile.</p>
+<h3 id="achievements-window">Achievements Window</h3>
+<p>This window will reveal all achievements available in the game. Completed
+achievements have <em>green</em> background, while yet uncompleted have <em>red</em>
+background color. Achievements are stored in player profile, and achievement
+progress won&#39;t reset after player exits the game. They will, however, be deleted
+with deletion of the player profile.</p>
+<p>The game is closed when player closes either <em>Player Profile Window</em> or
+<em>Game Window</em>, even if statistics or achievements window is opened.</p>
+<p>Written by Filip Kliber (zereges&lt;at&gt;gmail.com) in 2014/2015 as Semester Assignment<br>Link to <a href="https://github.com/Zereges/2048Java">GitHub</a> repository.</p>
+
+</body>
