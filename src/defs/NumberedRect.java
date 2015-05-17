@@ -71,7 +71,7 @@ public class NumberedRect extends Rect
      * Gets default font size of current {@code NumberedRect}. 
      * @return Default font size for given {@code NumberedRect}.
      */
-    public int getFontSize() { return Definitions.getDefaultBlockFontSize("" + mNumber); }
+    public int getFontSize() { return Definitions.getDefaultBlockFontSize("" + mShownNumber); }
     
     /**
      * Gets current font size of the {@code NumberedRect}.

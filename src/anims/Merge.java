@@ -55,6 +55,7 @@ public class Merge extends Movement
         {
             mAnimatedRects.remove(mSource);
             mTargetRect.updateShownNumber();
+            mTargetRect.setCurrentFontSize(mTargetRect.getFontSize());
             return true;
         }
         return false;
