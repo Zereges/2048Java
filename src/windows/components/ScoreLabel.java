@@ -38,10 +38,10 @@ public class ScoreLabel extends JLabel
     public int getScore() { return mScore; }
     
     /**
-     * Sets whether player won this game.
+     * Sets whether player won this game. This setting will be reflected only in the {@link ScoreLabel}
      * @param won True if player won this game, false otherwise.
      */
-    public void setWon(boolean won) { mWon = won; } 
+    public void setWon(boolean won) { mWon = won; updateScore(); } 
     
     /** Updates content of the label. */
     private void updateScore() { setText("Score: " + mScore + (mWon ? " (Won)" : "")); }
