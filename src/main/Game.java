@@ -239,7 +239,6 @@ public class Game extends JPanel
         mWon = true;
         mWindow.getScoreLabel().setWon(true);
         mPlayer.getStats().win();
-        
     }
     
     /**
