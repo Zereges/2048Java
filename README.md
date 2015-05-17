@@ -84,7 +84,7 @@ progress won't reset after player exits the game. They will, however, be deleted
 with deletion of the player profile.
 
 The game is closed when player closes either *Player Profile Window* or
- *Game Window*, even if statistics or achievements window is opened.
+*Game Window*, even if statistics or achievements window is opened.
 
 
 Written by Filip Kliber (zereges<at>gmail.com) in 2014/2015 as Semester Assignment  
