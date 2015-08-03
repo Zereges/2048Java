@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.JPanel;
 import anims.Merge;
 import anims.Movement;
@@ -43,7 +45,10 @@ public class Game extends JPanel
     private List<NumberedRect> mAnimatedRects = new ArrayList<>();
     
     /** Animator. */
-    private Animator mAnimator = new Animator(this);
+    private Animator mAnimator;
+    
+    /** Lock used to synchronize access to {@link mAnimatedRects}. */
+    private Lock mLock = new ReentrantLock();
     
     /** Represents whether player is allowed to perform next turn. */
     private boolean mCanplay = true;
@@ -80,6 +85,7 @@ public class Game extends JPanel
         });
         mPlayer = player;
         mWindow = window;
+        mAnimator = new Animator(this, mLock);
         
         mBackground.add(new Rect(new Point(0, 0), Definitions.BACKGROUND_COLOR, Definitions.getMinDimension().width, Definitions.getMinDimension().height));
         for (int x = 0; x < Definitions.BLOCK_COUNT_X; ++x)
@@ -550,7 +556,9 @@ public class Game extends JPanel
             for (NumberedRect rect : rects)
                 if (rect != null)
                     rect.draw(graphics);
+        mLock.lock();
         for (NumberedRect rect : mAnimatedRects)
             rect.draw(graphics);
+        mLock.unlock();
     }
 }

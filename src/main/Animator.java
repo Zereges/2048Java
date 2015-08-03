@@ -3,7 +3,6 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import anims.Animation;
 import defs.Definitions;
 
@@ -19,14 +18,14 @@ public class Animator
     /** Reference to {@link Game}. */
     private Game mGame;
     
-    /** Lock used to synchronize access to {@link } */
-    private Lock lock = new ReentrantLock();
+    /** Reference to lock used to synchronize access to {@link #mAnimations}. */
+    private Lock mLock;
     
     /**
      * Constructs Animator for the Game.
      * @param game Reference to {@link Game}
      */
-    public Animator(Game game) { mGame = game; }
+    public Animator(Game game, Lock lock) { mGame = game; mLock = lock; }
     
     /**
      * Passes {@code animation} to the Animator class.
@@ -41,17 +40,17 @@ public class Animator
      */
     public void addAndStart(Animation animation)
     {
-        lock.lock();
+        mLock.lock();
         if (mAnimations.size() == 0)
         {
-            lock.unlock();
+            mLock.unlock();
             mAnimations.add(animation);
             startAnimation();
         }
         else
         {
             mAnimations.add(animation);
-            lock.unlock();
+            mLock.unlock();
         }
     }
     
@@ -68,11 +67,11 @@ public class Animator
             {
                 long nextTick = System.currentTimeMillis();
                 long sleepTime;
-                lock.lock();
+                mLock.lock();
                 while (mAnimations.size() != 0)
                 {
                     animate();
-                    lock.unlock();
+                    mLock.unlock();
                     mGame.repaint();
                     nextTick += 1000 / Definitions.FRAMES_PER_SECOND;
                     sleepTime = nextTick - System.currentTimeMillis();
@@ -84,9 +83,9 @@ public class Animator
                         }
                         catch (InterruptedException e) { }
                     }
-                    lock.lock();
+                    mLock.lock();
                 }
-                lock.unlock();
+                mLock.unlock();
             }
         };
         thread.start();
@@ -99,5 +98,8 @@ public class Animator
     public boolean hasFinished() { return mAnimations.size() == 0; }
 
     /** Performs one step of the animation. This is called about {@link Definitions#FRAMES_PER_SECOND} times in a second. */
-    private void animate() { mAnimations.removeIf((Animation animation) -> { return animation.animate(); }); }
+    private void animate()
+    {
+        mAnimations.removeIf((Animation animation) -> { return animation.animate(); });
+    }
 }
